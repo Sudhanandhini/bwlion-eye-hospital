@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import {
   Eye, ArrowRight, Heart, ChevronLeft, ChevronRight, Star, Quote,
 } from "lucide-react";
@@ -25,6 +26,9 @@ import opticalsPhoto from "../assets/img/Opticals.jpg";
 import pharmacyPhoto from "../assets/img/West-Lions-Pharma.jpg";
 import eyeBankPhoto from "../assets/img/Eye-Bank.jpg";
 import boyReadingBookVideo from "../assets/img/boy-reading-book.mov";
+const galleryThumbs = Object.values(
+  import.meta.glob("../assets/img/event/*.{jpg,jpeg,png}", { eager: true, import: "default" })
+);
 import drMomathaImg from "../assets/img/dr.mamatha.jpg";
 import drRekhaImg from "../assets/img/Dr.-Rekha-Gyanchand.jpg";
 import drRamaDeviImg from "../assets/img/dr.Rama-Devi.jpg";
@@ -84,6 +88,8 @@ const courses = [
   { num: "04", icon: "🧠", title: "Diploma in Opthalmic Technology Course", desc: "A diploma in Opthalmic Technology is offered by the Paramedical Board." },
 ];
 
+const currentOpenings = ["Current Openings in JC Road", "Current Openings in Chintamani"];
+
 const testimonials = [
   {
     text: "Their doctors include highly qualified practitioners who come from a range of backgrounds and bring with them a diversity of skills and special interests. They also have registered nurses on staff who are available to triage any urgent matters, and the administration and support staff all have exceptional people skills.",
@@ -101,6 +107,15 @@ function SectionEyebrow({ children }) {
 
 export default function Home() {
   const [testimonialIdx, setTestimonialIdx] = useState(0);
+  const [galleryIdx, setGalleryIdx] = useState(0);
+  const visibleThumbs = [0, 1, 2, 3].map((offset) => galleryThumbs[(galleryIdx + offset) % galleryThumbs.length]);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setGalleryIdx((i) => (i + 1) % galleryThumbs.length);
+    }, 2500);
+    return () => clearInterval(timer);
+  }, []);
+
   const [courseIdx, setCourseIdx] = useState(0);
   const visibleCourses = [0, 1, 2].map((offset) => courses[(courseIdx + offset) % courses.length]);
   useEffect(() => {
@@ -143,9 +158,18 @@ export default function Home() {
 
       {/* Appointment bar */}
       <section className="max-w-[1320px] mx-auto px-4">
-        <div className="bg-white shadow-lg rounded-md -mt-7 relative z-10 px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-gray-500 !text-[20px] m-0">Current Openings in JC Road</p>
-          <p className="text-secondary font-semibold !text-[20px] m-0">Current Openings in Chintamani  </p>
+        <div className="bg-white shadow-lg rounded-md -mt-7 relative z-10 py-5 overflow-hidden">
+          <div className="flex w-max gap-16 animate-marquee hover:[animation-play-state:paused]">
+            {[...currentOpenings, ...currentOpenings].map((text, i) => (
+              <Link
+                key={i}
+                to="/career"
+                className="text-secondary font-semibold !text-[28px] whitespace-nowrap px-8 hover:underline"
+              >
+                {text}
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -308,7 +332,9 @@ export default function Home() {
           ))}
         </div>
         <button className="bg-primary text-white px-7 py-3 rounded-md font-medium !text-[20px]">
-          View More
+         <a href="/doctors" className="text-white hover:text-primary">
+            View More
+          </a>
         </button>
       </section>
 
@@ -394,23 +420,26 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="flex items-center justify-center gap-6">
+        <div className="flex items-center justify-center gap-3 sm:gap-6 px-2">
           <button
             onClick={() => setTestimonialIdx((i) => (i === 0 ? testimonials.length - 1 : i - 1))}
-            className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-primary hover:bg-primary hover:text-white"
+            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-gray-300 flex items-center justify-center text-primary hover:bg-primary hover:text-white flex-shrink-0"
           >
             <ChevronLeft size={18} />
           </button>
-          <div className="flex gap-3">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="w-28 h-20 bg-gray-100 rounded-md flex items-center justify-center">
-                <Eye size={26} className="text-primary/20" />
+          <div className="flex gap-2 sm:gap-3 min-w-0">
+            {visibleThumbs.map((src, i) => (
+              <div
+                key={`${galleryIdx}-${i}`}
+                className={`${i === 0 ? "" : "hidden sm:block"} w-[250px] h-auto sm:w-[70px] sm:h-auto md:w-[250px] md:h-auto rounded-md overflow-hidden flex-shrink-0`}
+              >
+                <img src={src} alt="Gallery" className="w-full h-full object-cover" />
               </div>
             ))}
           </div>
           <button
             onClick={() => setTestimonialIdx((i) => (i === testimonials.length - 1 ? 0 : i + 1))}
-            className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-primary hover:bg-primary hover:text-white"
+            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-gray-300 flex items-center justify-center text-primary hover:bg-primary hover:text-white flex-shrink-0"
           >
             <ChevronRight size={18} />
           </button>
@@ -418,7 +447,9 @@ export default function Home() {
 
         <div className="text-center mt-10">
           <button className="bg-primary text-white px-7 py-3 rounded-full font-medium !text-[20px] inline-flex items-center gap-2">
-            View More <ArrowRight size={20} />
+          <a href="/gallery" className="text-white hover:text-primary">
+            View More
+          </a>
           </button>
         </div>
       </section>
@@ -426,16 +457,16 @@ export default function Home() {
       {/* Book Appointment + Donations */}
       <section className="relative bg-primary text-white" style={{ backgroundImage: `url(${heroImg1})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
         <div className="absolute inset-0 bg-primary/85" />
-        <div className="relative max-w-[1320px] mx-auto px-4 py-20 grid md:grid-cols-2 gap-10">
+        <div className="relative max-w-[1320px] mx-auto px-4 py-20 grid grid-cols-1 md:grid-cols-2 gap-10">
           {/* Form */}
-          <div className="bg-white text-primary rounded-md p-7">
+          <div className="bg-white text-primary rounded-md p-7 min-w-0">
             <h4 className="text-secondary mb-2">Book An Appointment</h4>
             <p className="!text-[14px] text-gray-500 mb-5">
               Health is too precious to not pay attention to. Book your appointment for the
               best treatment! BW shall send you confirmation of the hospital. Kindly book an
               appointment by filling the form.
             </p>
-            <form className="grid sm:grid-cols-2 gap-4" onSubmit={(e) => e.preventDefault()}>
+            <form className="grid grid-cols-1 sm:grid-cols-2 gap-4" onSubmit={(e) => e.preventDefault()}>
               <select className="border border-gray-300 rounded-md px-4 py-3 !text-[15px] sm:col-span-2">
                 <option>Select Hospital</option>
               </select>
@@ -447,13 +478,15 @@ export default function Home() {
               <input type="email" className="border border-gray-300 rounded-md px-4 py-3 !text-[15px]" placeholder="Email" />
               <textarea className="border border-gray-300 rounded-md px-4 py-3 !text-[15px] sm:col-span-2" rows={3} placeholder="Comments" />
               <button type="submit" className="bg-primary text-white px-6 py-3 rounded-md font-medium !text-[20px] sm:col-span-2">
-                Make Appointment
+                <a href="/contacts" className="text-white hover:text-primary">
+                  Make Appointment
+                </a>
               </button>
             </form>
           </div>
 
           {/* Donations */}
-          <div>
+          <div className="min-w-0">
             <h3 className="mb-6">Helping Patients From Around the Globe!!</h3>
             <p className="text-gray-200 !text-[20px] mb-6">
               We accept payments by card, cheque, and direct bank transfer.
@@ -462,14 +495,14 @@ export default function Home() {
               <Heart size={20} /> Make Donation
             </button>
 
-            <p className="!text-[15px] text-gray-300 mb-2">
+            <p className="!text-[15px] text-gray-300 mb-2 break-words">
               All Donations are exempt under Section 80G of IT Act. 081T(D)BLR/80G/(R)670/AAATL0593F/lto(D)-1VOL2007-2008
             </p>
-            <p className="!text-[15px] text-gray-300 mb-4">
+            <p className="!text-[15px] text-gray-300 mb-4 break-words">
               Permitted to receive INTERNATIONAL DONATIONS under FCRA. Approval number 8/20122/69(652)/85-FORAGI (26-10-1984).
             </p>
             <p className="!text-[15px] font-semibold text-secondary mb-2">DIRECT BANK TRANSFER</p>
-            <p className="!text-[15px] text-gray-300">
+            <p className="!text-[15px] text-gray-300 break-words">
               ACCOUNT NUMBER: 1420/1031120<br />
               BANK NAME: Korus Mahindra Bank<br />
               IFSC CODE: KKBK0000958<br />

@@ -1,8 +1,23 @@
+import { Link } from "react-router-dom";
 import { Phone, MessageCircle, ArrowRight } from "lucide-react";
 import { FacebookIcon, InstagramIcon, TwitterIcon } from "./SocialIcons";
 import bwLogo from "../assets/img/bw-logo-320-grey-300x75.png";
 
-const otherLinks = ["Insurance Claim", "Career", "Gallery"];
+const otherLinks = [
+  { label: "Insurance Claim", path: "/insurance-claim" },
+  { label: "Career", path: "/career" },
+  { label: "Gallery", path: "/gallery" },
+];
+
+const menuLinks = [
+  { label: "Home", path: "/" },
+  { label: "About Us", path: "/vision-mission" },
+  { label: "Specialties", path: "/specialties" },
+  { label: "Academics", path: "/academics" },
+  { label: "Knowledge Center", path: "/cataract" },
+
+  { label: "Contacts", path: "/contacts" },
+];
 
 export default function Footer() {
   return (
@@ -34,9 +49,13 @@ export default function Footer() {
           <div>
             <h4 className="text-white mb-5">Other Links</h4>
             <ul className="space-y-3">
-              {otherLinks.map((link) => (
-                <li key={link}>
-                  <a href="#" className="text-gray-300 hover:text-secondary text-[16px]">{link}</a>
+              {otherLinks.map(({ label, path }) => (
+                <li key={label}>
+                  {path ? (
+                    <Link to={path} className="text-gray-300 hover:text-secondary text-[16px]">{label}</Link>
+                  ) : (
+                    <a href="#" className="text-gray-300 hover:text-secondary text-[16px]">{label}</a>
+                  )}
                 </li>
               ))}
             </ul>
@@ -46,9 +65,11 @@ export default function Footer() {
           <div>
             <h4 className="text-white mb-5">Links</h4>
             <ul className="space-y-3">
-              <li>
-                <a href="#" className="text-gray-300 hover:text-secondary text-[16px]">Eye Bank</a>
-              </li>
+              {menuLinks.map(({ label, path }) => (
+                <li key={label}>
+                  <Link to={path} className="text-gray-300 hover:text-secondary text-[16px]">{label}</Link>
+                </li>
+              ))}
             </ul>
           </div>
 

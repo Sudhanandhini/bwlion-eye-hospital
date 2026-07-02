@@ -26,11 +26,18 @@ const specialtyLinks = [
   { label: "Laboratory", path: "/specialties" },
   { label: "Community Ophthalmology (Social Outreach)", path: "/specialties" },
 ];
-const knowledgeCenterLinks = ["Patient Education", "Blogs", "FAQs"];
-const eventLinks = ["Upcoming Events", "Past Events", "Camps"];
+const knowledgeCenterLinks = [
+  { label: "Cataract", path: "/cataract" },
+  { label: "Glaucoma", path: "/glaucoma" },
+  { label: "Uveitis", path: "/uveitis" },
+  { label: "Retina", path: "/retina" },
+  { label: "Oculoplasty", path: "/oculoplasty" },
+  { label: "Pediatric Eye Disorders", path: "/pediatric-eye-disorders" },
+];
+const eventLinks = [{ label: "Gallery", path: "/gallery" }];
 
 function Dropdown({ label, labelPath, items, isOpen, onToggle, wide }) {
-  const labelClassName = "px-3 py-2 text-[15px] font-medium text-primary hover:text-secondary transition-colors flex items-center gap-1";
+  const labelClassName = "px-3 py-2 text-[18px] font-medium text-primary hover:text-secondary transition-colors flex items-center gap-1";
   return (
     <div className="relative" onMouseEnter={() => onToggle(label)} onMouseLeave={() => onToggle(null)}>
       {labelPath ? (
@@ -54,8 +61,8 @@ function Dropdown({ label, labelPath, items, isOpen, onToggle, wide }) {
             const label = typeof item === "string" ? item : item.label;
             const path = typeof item === "string" ? null : item.path;
             const className = wide
-              ? "block py-2 text-[15px] text-primary hover:text-secondary break-inside-avoid"
-              : "block px-5 py-2 text-[15px] text-primary hover:bg-secondary/10 hover:text-secondary";
+              ? "block py-2 text-[18px] text-primary hover:text-secondary break-inside-avoid"
+              : "block px-5 py-2 text-[18px] text-primary hover:bg-secondary/10 hover:text-secondary";
             return path ? (
               <Link key={label} to={path} className={className}>{label}</Link>
             ) : (
@@ -78,7 +85,7 @@ export default function Header() {
     return (
       <Link
         to={path}
-        className={`px-3 py-2 text-[15px] font-medium text-primary hover:text-secondary transition-colors ${active ? "text-secondary" : ""}`}
+        className={`px-3 py-2 text-[18px] font-medium text-primary hover:text-secondary transition-colors ${active ? "text-secondary" : ""}`}
       >
         {label}
       </Link>
@@ -118,7 +125,7 @@ export default function Header() {
 
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 flex-shrink-0">
-            <img src={bwLogo} alt="BW Lions Logo" className="w-[290px] h-auto object-contain rounded-full" />
+            <img src={bwLogo} alt="BW Lions Logo" className="w-[170px] sm:w-[220px] lg:w-[290px] h-auto object-contain rounded-full" />
             {/* <div className="leading-tight">
               <p className="!text-[13px] font-bold text-primary uppercase m-0 tracking-wide">Bangalore West Lions</p>
               <p className="!text-[13px] font-bold text-primary uppercase m-0 tracking-wide">Super Speciality</p>
@@ -127,24 +134,24 @@ export default function Header() {
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden lg:flex items-center flex-shrink-0">
+          <nav className="hidden lg:flex items-center flex-shrink-0 ">
             {navLink("/", "Home")}
             <Dropdown label="About Us" items={aboutLinks} isOpen={openMenu === "About Us"} onToggle={setOpenMenu} />
-            <Dropdown label="Specialties" labelPath="/specialties" items={specialtyLinks} isOpen={openMenu === "Specialties"} onToggle={setOpenMenu} wide />
-            <a href="#" className="px-3 py-2 text-[15px] font-medium text-primary hover:text-secondary transition-colors">Academics</a>
+            <Dropdown label="Specialties" labelPath="/specialties" items={specialtyLinks} isOpen={openMenu === "Specialties"} onToggle={setOpenMenu} />
+            {navLink("/academics", "Academics")}
             <Dropdown label="Knowledge Center" items={knowledgeCenterLinks} isOpen={openMenu === "Knowledge Center"} onToggle={setOpenMenu} />
-            <Dropdown label="Events" items={eventLinks} isOpen={openMenu === "Events"} onToggle={setOpenMenu} />
-            <a href="#" className="px-3 py-2 text-[15px] font-medium text-primary hover:text-secondary transition-colors">Careers</a>
+            <Dropdown label="Events" labelPath="/gallery" items={eventLinks} isOpen={openMenu === "Events"} onToggle={setOpenMenu} />
+            {navLink("/career", "Careers")}
             {navLink("/contacts", "Contacts")}
           </nav>
 
           {/* Right: Eye Bank + NABH */}
           <div className="hidden lg:flex items-center gap-4 flex-shrink-0">
-            <a href="#" className="flex items-center gap-1.5 text-secondary font-semibold text-[15px]">
+            <a href="https://lionsinternationaleyebankbangalore.in/" className="flex items-center gap-1.5 text-secondary font-semibold text-[18px]">
               <AlignJustify size={17} className="text-secondary" />
               <span>Eye Bank</span>
             </a>
-            <div className="w-16 h-16 rounded-xl overflow-hidden border-2 border-[#1a4fa3] bg-[#1a4fa3]">
+            <div className="w-20 h-auto rounded-xl overflow-hidden ">
               <img src={nabhLogo} alt="NABH Accredited" className="w-full h-full object-contain" />
             </div>
           </div>
@@ -157,9 +164,9 @@ export default function Header() {
 
         {/* Mobile Nav */}
         {mobileOpen && (
-          <div className="lg:hidden bg-primary px-4 py-3 flex flex-col">
+          <div className="lg:hidden  px-4 py-3 flex flex-col">
             <Link to="/" className="py-2 text-white text-[15px]" onClick={() => setMobileOpen(false)}>Home</Link>
-            <span className="py-2 text-white text-[15px] font-semibold">About Us</span>
+            <span className="py-2  text-[15px] font-semibold">About Us</span>
             {aboutLinks.map(({ label, path }) => (
               <Link key={label} to={path} className="py-2 pl-4 text-white/80 text-[14px]" onClick={() => setMobileOpen(false)}>
                 {label}
@@ -171,12 +178,17 @@ export default function Header() {
                 {label}
               </Link>
             ))}
-            <a href="#" className="py-2 text-white text-[15px]">Academics</a>
-            <a href="#" className="py-2 text-white text-[15px]">Knowledge Center</a>
-            <a href="#" className="py-2 text-white text-[15px]">Events</a>
-            <a href="#" className="py-2 text-white text-[15px]">Careers</a>
+            <Link to="/academics" className="py-2 text-white text-[15px]" onClick={() => setMobileOpen(false)}>Academics</Link>
+            <span className="py-2  text-[15px] font-semibold">Knowledge Center</span>
+            {knowledgeCenterLinks.map(({ label, path }) => (
+              <Link key={label} to={path} className="py-2 pl-4 text-white/80 text-[14px]" onClick={() => setMobileOpen(false)}>
+                {label}
+              </Link>
+            ))}
+            <Link to="/gallery" className="py-2 text-white text-[15px]" onClick={() => setMobileOpen(false)}>Events</Link>
+            <Link to="/career" className="py-2 text-white text-[15px]" onClick={() => setMobileOpen(false)}>Careers</Link>
             <Link to="/contacts" className="py-2 text-white text-[15px]" onClick={() => setMobileOpen(false)}>Contacts</Link>
-            <a href="#" className="py-2 text-secondary font-semibold text-[15px]">Eye Bank</a>
+            <a href="https://lionsinternationaleyebankbangalore.in/" className="py-2 text-secondary font-semibold text-[15px]">Eye Bank</a>
           </div>
         )}
       </div>

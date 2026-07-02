@@ -35,6 +35,15 @@ h6 { font-size: 20px; font-weight: 600;  }
   p { font-size: 20px; }
 }
 
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 12s linear infinite;
+}
+
 * { box-sizing: border-box; }
 a { text-decoration: none; color: inherit; }
 button { cursor: pointer; }
