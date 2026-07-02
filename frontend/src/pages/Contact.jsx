@@ -3,7 +3,7 @@ import {
   MapPin, Phone, MessageCircle, Mail, ArrowRight,
   User, ChevronDown, Calendar, Clock,
 } from "lucide-react";
-import logo from "../assets/img/download.png";
+import PageBanner from "../components/PageBanner";
 
 const locations = [
   {
@@ -68,24 +68,7 @@ export default function Contact() {
 
   return (
     <main>
-      {/* Page Banner */}
-      <section className="bg-[#FAF1DC]">
-        <div className="max-w-[1320px] mx-auto px-4 py-10 flex items-center justify-between gap-6">
-          <div>
-            <h1 className="text-primary mb-3">Contact us</h1>
-            <div className="flex items-center gap-2 !text-[15px]">
-              <a href="/" className="text-gray-500 hover:text-secondary">Home</a>
-              <span className="text-secondary">›</span>
-              <span className="text-secondary font-semibold">Contact Us</span>
-            </div>
-          </div>
-          <div className="hidden md:flex flex-col items-center select-none">
-            {/* <div className="w-24 h-12 border-[5px] border-primary/40 rounded-full mb-1" /> */}
-            <img src={logo} alt="LionsEye Logo" className="w-[150px] h-auto object-contain" />
-            {/* <p className="text-primary font-extrabold text-3xl uppercase tracking-[6px] m-0">LionsEye</p> */}
-          </div>
-        </div>
-      </section>
+      <PageBanner title="Contact us" crumb="Contact Us" />
 
       {/* Hospital Locations */}
       <section className="py-14">

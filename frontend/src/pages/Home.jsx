@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Eye, ArrowRight, Heart, ChevronLeft, ChevronRight, Star, Quote,
 } from "lucide-react";
@@ -6,12 +6,35 @@ import cataractImg from "../assets/img/cataract.png";
 import glaucomaImg from "../assets/img/glaucoma.png";
 import retinaImg from "../assets/img/retina-1.png";
 import oculoplastyImg from "../assets/img/Oculoplasty.png";
-import heroImg from "../assets/hero.png";
+import heroImg from "../assets/img/banner-1.jpg";
+import opticalStoreImg from "../assets/img/1.png";
+import pharmacyImg from "../assets/img/2.png";
+import laboratoryImg from "../assets/img/3.png";
+import lionseyeLogo from "../assets/img/download.png";
+import expertImg from "../assets/img/person.png";
+import cataractPhoto from "../assets/img/Cataract.jpg";
+import contactLensPhoto from "../assets/img/Contact-Lens-and-Visual-Aids.jpg";
+import corneaPhoto from "../assets/img/Cornea.jpg";
+import glaucomaPhoto from "../assets/img/Glaucoma-1.jpg";
+import oculoplastyPhoto from "../assets/img/Oculoplasty.jpg";
+import pediatricPhoto from "../assets/img/Paediatric-and-Squint.jpg";
+import uveitisPhoto from "../assets/img/uveitis.jpg";
+import retinaPhoto from "../assets/img/retina.webp";
+import laboratoryPhoto from "../assets/img/Laboratory.jpg";
+import opticalsPhoto from "../assets/img/Opticals.jpg";
+import pharmacyPhoto from "../assets/img/West-Lions-Pharma.jpg";
+import eyeBankPhoto from "../assets/img/Eye-Bank.jpg";
+import boyReadingBookVideo from "../assets/img/boy-reading-book.mov";
+import drMomathaImg from "../assets/img/dr.mamatha.jpg";
+import drRekhaImg from "../assets/img/Dr.-Rekha-Gyanchand.jpg";
+import drRamaDeviImg from "../assets/img/dr.Rama-Devi.jpg";
 
+import heroImg1 from "../assets/img/ptt_default.jpg"
+ 
 const heroFeatures = [
   { img: cataractImg, label: "Cataract Clinic" },
   { img: glaucomaImg, label: "Glaucoma" },
-  { img: oculoplastyImg, label: "Oculoplasty" },
+  { img: oculoplastyImg, label: "Cornea" },
   { img: retinaImg, label: "Retina" },
 ];
 
@@ -19,39 +42,43 @@ const services = [
   {
     title: "Optical Store",
     desc: "The BW Lions Super Speciality Eye Hospital has an in-house Optical Store which stocks a wide range of frames, sunglasses, post-operation glasses, safety eyewear, contact lenses.",
+    img: opticalStoreImg,
   },
   {
     title: "Pharmacy",
     desc: "The pharmacy is located within the hospital premises and is well-stocked with the latest and best quality Ophthalmic drugs for a wide range of eye problems.",
+    img: pharmacyImg,
   },
   {
     title: "Laboratory",
     desc: "The hospital has an in-house well-equipped Laboratory to conduct the necessary biochemical, hematological, and microbiological investigations needed for Eye Surgery.",
+    img: laboratoryImg,
   },
 ];
 
 const specialties = [
-  "Cataract Clinic",
-  "Contact Lens and Low Visual Aids",
-  "Cornea and Refractive Surgery",
-  "Glaucoma",
-  "Oculoplasty",
-  "Pediatric",
-  "Uveitis",
-  "Vitreo Retina",
-  "Laboratory",
-  "Opticals",
-  "Pharmacy",
-  "Eye Bank",
+  { label: "Cataract Clinic", img: cataractPhoto },
+  { label: "Contact Lens and Low Visual Aids", img: contactLensPhoto },
+  { label: "Cornea and Refractive Surgery", img: corneaPhoto },
+  { label: "Glaucoma", img: glaucomaPhoto },
+  { label: "Oculoplasty", img: oculoplastyPhoto },
+  { label: "Pediatric", img: pediatricPhoto },
+  { label: "Uveitis", img: uveitisPhoto },
+  { label: "Vitreo Retina", img: retinaPhoto },
+  { label: "Laboratory", img: laboratoryPhoto },
+  { label: "Opticals", img: opticalsPhoto },
+  { label: "Pharmacy", img: pharmacyPhoto },
+  { label: "Eye Bank", img: eyeBankPhoto },
 ];
 
 const doctors = [
-  { name: "Dr. Momatha B", role: "Medical Director", qual: "MBBS, MS, Fellowship in GO, Fellow in Cornea" },
-  { name: "Dr. Rekha Gyanchand", role: "Medical Director - Eye Bank", qual: "MBBS, MS, Fellowship in GO" },
-  { name: "Dr. Rama Devi K.S", role: "Medical Superintendent", qual: "MBBS, DOMS, DNB" },
+  { name: "Dr. Momatha B", role: "Medical Director", qual: "MBBS, MS, Fellowship in GO, Fellow in Cornea", img: drMomathaImg },
+  { name: "Dr. Rekha Gyanchand", role: "Medical Director - Eye Bank", qual: "MBBS, MS, Fellowship in GO", img: drRekhaImg },
+  { name: "Dr. Rama Devi K.S", role: "Medical Superintendent", qual: "MBBS, DOMS, DNB", img: drRamaDeviImg },
 ];
 
 const courses = [
+  { num: "01", icon: "🏅", title: "Diplomate of National Board DNB", desc: "The DNB program is affiliated with the NBE." },
   { num: "02", icon: "🧬", title: "Fellowship Programs", desc: "The fellowship courses are offered to PG aspirants." },
   { num: "03", icon: "🩺", title: "B. Sc Optometry", desc: "B.Sc Degree in Optometry recognized by RGUHS." },
   { num: "04", icon: "🧠", title: "Diploma in Opthalmic Technology Course", desc: "A diploma in Opthalmic Technology is offered by the Paramedical Board." },
@@ -68,23 +95,34 @@ const testimonials = [
 
 function SectionEyebrow({ children }) {
   return (
-    <p className="!text-[16px] font-semibold text-secondary uppercase tracking-wide mb-2">{children}</p>
+    <p className="!text-[20px] font-semibold text-secondary uppercase tracking-wide mb-2">{children}</p>
   );
 }
 
 export default function Home() {
   const [testimonialIdx, setTestimonialIdx] = useState(0);
+  const [courseIdx, setCourseIdx] = useState(0);
+  const visibleCourses = [0, 1, 2].map((offset) => courses[(courseIdx + offset) % courses.length]);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCourseIdx((i) => (i + 1) % courses.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <main>
       {/* Hero */}
-      <section className="bg-[#FAF1DC]">
-        <div className="max-w-[1320px] mx-auto px-4 py-14 grid md:grid-cols-2 gap-8 items-center">
-          <div>
-            <h1 className="text-primary mb-5">
+      <section
+        className="bg-[#FAF1DC] bg-no-repeat bg-cover bg-right h-[700px] flex items-center"
+        style={{ backgroundImage: `url(${heroImg})` }}
+      >
+        <div className="max-w-[1320px] mx-auto px-4 w-full">
+          <div className="max-w-lg">
+            <h1 className="text-primary !mb-8 leading-tight font-semibold" style={{ fontSize: '60px'}}>
               Experience World Class Eye Care
             </h1>
-            <p className="text-gray-600 mb-7 max-w-md">
+            <p className="text-gray-600 mb-7 max-w-md font-semibold">
               Bangalore West Lions Super Speciality Eye Hospital which is a unit of
               Lions Club of Bangalore West Trust is the most trusted Non-Profit Eye
               Hospital running in Bangalore.
@@ -92,20 +130,13 @@ export default function Home() {
             <div className="flex gap-6 flex-wrap">
               {heroFeatures.map(({ img, label }) => (
                 <div key={label} className="flex flex-col items-center gap-2">
-                  <div className="w-14 h-14 rounded-full border border-primary/30 flex items-center justify-center bg-white p-1">
-                    <img src={img} alt={label} className="w-full h-full object-contain" />
+                  <div className="w-20 h-20 rounded-full border border-primary/30 flex items-center justify-center bg-white p-1">
+                    <img src={img} alt={label} className="w-[60px] h-full object-contain" />
                   </div>
                   <span className="!text-[13px] text-primary font-medium text-center">{label}</span>
                 </div>
               ))}
             </div>
-          </div>
-          <div className="flex justify-center">
-            <img
-              src={heroImg}
-              alt="Eye Care"
-              className="w-full max-w-sm object-contain rounded-xl"
-            />
           </div>
         </div>
       </section>
@@ -113,52 +144,61 @@ export default function Home() {
       {/* Appointment bar */}
       <section className="max-w-[1320px] mx-auto px-4">
         <div className="bg-white shadow-lg rounded-md -mt-7 relative z-10 px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-gray-500 !text-[16px] m-0">Book An Appointment</p>
-          <p className="text-secondary font-semibold !text-[16px] m-0">Current Open</p>
+          <p className="text-gray-500 !text-[20px] m-0">Current Openings in JC Road</p>
+          <p className="text-secondary font-semibold !text-[20px] m-0">Current Openings in Chintamani  </p>
         </div>
       </section>
 
       {/* Services cards */}
-      <section className="max-w-[1320px] mx-auto px-4 py-16">
+      <section className="max-w-[1320px] mx-auto px-4 py-20">
         <div className="grid sm:grid-cols-3 gap-6">
           {services.map((s) => (
-            <div key={s.title} className="border border-gray-200 rounded-md p-7 hover:shadow-lg transition-shadow">
-              <div className="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center text-secondary mb-4">
-                <Eye size={22} />
+            <div key={s.title} className="border border-gray-200 rounded-md p-12 hover:shadow-lg transition-shadow">
+              <div className="w-20 h-20 rounded-full bg-secondary/10 flex items-center justify-center mb-4 p-4">
+                <img src={s.img} alt={s.title} className="w-full h-full object-contain" />
               </div>
               <h4 className="text-primary mb-3">{s.title}</h4>
-              <p className="text-gray-500 !text-[15px]">{s.desc}</p>
+              <p className="text-gray-500 !text-[18px]">{s.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
       {/* Improving quality of life */}
-      <section className="max-w-[1320px] mx-auto px-4 pb-16">
-        <div className="grid md:grid-cols-2 gap-8 items-center">
+      <section className="max-w-[1320px] mx-auto px-4 pb-20">
+        <div className="flex items-center justify-between flex-wrap gap-4 mb-10">
           <div>
-            <SectionEyebrow>Lionseye</SectionEyebrow>
-            <h2 className="text-primary mb-5">
+            {/* <SectionEyebrow>Lionseye</SectionEyebrow> */}
+            <h2 className="text-secondary !mb-0">
               Improving The Quality Of Your Life Through Better Eye Care.
             </h2>
-            <p className="text-gray-500 mb-6">
-              Expert Professionals! World Class Services at a competitive price! Be assured
-              of professional expertise in Eye Care, We serve thousands of people and have
-              restored sight in their...
-            </p>
-            <button className="bg-primary text-white px-6 py-3 rounded-md font-medium !text-[16px] hover:bg-primary/90">
-              Book An Appointment
-            </button>
           </div>
-          <div className="flex justify-center">
-            <Eye size={100} className="text-primary/20" />
-          </div>
+          <img src={lionseyeLogo} alt="Lionseye" className="h-20 object-contain flex-shrink-0" />
         </div>
+        <div className="grid md:grid-cols-2 gap-8 items-start">
+          <div className="flex gap-4">
+            <img src={expertImg} alt="Expert Professionals" className="w-16 h-16 object-contain flex-shrink-0" />
+            <p className="text-primary font-semibold !text-[18px]">
+              Expert Professionals! World Class Services at a competitive price! With more than
+              4 decades of professional expertise in Eye Care, We serve thousands of people and
+              have restored sight in them…
+            </p>
+          </div>
+          <p className="text-gray-500">
+            Bangalore West Lions Super Speciality Eye Hospital is the most trusted Non-Profit Eye
+            Hospital running in Bangalore which is a unit of the Lions club of Bangalore West Trust.
+            The Bangalore West Lions Super Speciality Eye Hospital was established on 30th June 1984
+            as part of the Lions Club of Bangalore West Trust.
+          </p>
+        </div>
+        <button className="bg-primary text-white px-7 py-3 rounded-full font-medium !text-[20px] hover:bg-primary/90 mt-8 inline-flex items-center gap-2">
+          Book An Appointment <ArrowRight size={18} />
+        </button>
       </section>
 
       {/* Vision Mission Specialties */}
       <section className="bg-primary text-white">
-        <div className="max-w-[1320px] mx-auto px-4 py-16">
+        <div className="max-w-[1320px] mx-auto px-4 py-20">
           <span className="block w-10 h-1 bg-secondary mb-4" />
           <h2 className="mb-10 max-w-2xl">
             BW Lions Eye Hospital Has Touched The Lives Of Patients by Providing World Class Eye Care
@@ -167,21 +207,21 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-10 mb-10">
             <div>
               <h4 className="text-secondary mb-3">Vision</h4>
-              <p className="text-gray-200 !text-[16px]">
+              <p className="text-gray-200 !text-[20px]">
                 Fight blindness, gift sight to visually deprived people, and provide world-class
                 eye care services at affordable rates.
               </p>
             </div>
             <div>
               <h4 className="text-secondary mb-3">Mission</h4>
-              <p className="text-gray-200 !text-[16px]">
+              <p className="text-gray-200 !text-[20px]">
                 Affordable quality eye care for all by providing cost-effective, equitable,
                 ethical, cutting-edge technology consultations.
               </p>
             </div>
             <div>
               <h4 className="text-secondary mb-3">Specialties</h4>
-              <p className="text-gray-200 !text-[16px] mb-2">
+              <p className="text-gray-200 !text-[20px] mb-2">
                 We have been advancing with the latest technological trends to impart the
                 best service at an affordable cost. We serve all kinds of Eye Disorders
                 with the correction of refractive errors to complex eye surgeries.
@@ -195,34 +235,52 @@ export default function Home() {
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
             {specialties.map((sp) => (
               <div
-                key={sp}
-                className="bg-white text-primary rounded-md px-5 py-6 font-medium !text-[16px] hover:bg-secondary hover:text-white transition-colors text-center"
+                key={sp.label}
+                className="group relative h-52 rounded-md overflow-hidden bg-white"
               >
-                {sp}
+                <img
+                  src={sp.img}
+                  alt={sp.label}
+                  className="absolute inset-0 w-full h-full object-cover scale-110 opacity-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300"
+                />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-colors duration-300" />
+                <div className="relative h-full flex items-center justify-center group-hover:items-end group-hover:justify-start px-5 py-6 text-center group-hover:text-left transition-all duration-300">
+                  <span className="text-primary group-hover:text-white font-medium !text-[20px] pr-2 group-hover:pb-2">
+                    {sp.label}
+                  </span>
+                </div>
+                <span className="absolute right-5 bottom-5 w-9 h-9 rounded-full bg-secondary text-white flex items-center justify-center opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300">
+                  <ArrowRight size={16} />
+                </span>
               </div>
             ))}
           </div>
 
-          <p className="text-center text-gray-300 !text-[16px] mt-8">
+          <p className="text-center text-gray-300 !text-[20px] mt-8">
             We hope you will allow us to care for you and strive to be the first and best choice for eyecare.
           </p>
         </div>
       </section>
 
       {/* Eye Donation */}
-      <section className="max-w-[1320px] mx-auto px-4 py-16">
+      <section className="max-w-[1320px] mx-auto px-4 py-20">
         <div className="grid md:grid-cols-2 gap-8 items-center">
-          <div className="bg-gray-100 rounded-md aspect-video flex items-center justify-center">
-            <Eye size={70} className="text-primary/30" />
-          </div>
+          <video
+            src={boyReadingBookVideo}
+            className="w-full rounded-md aspect-video object-cover"
+            autoPlay
+            loop
+            muted
+            playsInline
+          />
           <div>
             <h3 className="text-secondary mb-4">Pass on your gift of Sight!</h3>
             <p className="text-gray-500 mb-6">
               The joy of sight is the gift to mankind. Not everyone has the privilege to see
               the world. You can make a difference by pledging to donate your eyes!
             </p>
-            <button className="bg-secondary text-white px-6 py-3 rounded-md font-medium !text-[16px] flex items-center gap-2">
-              <Heart size={16} /> Pledge Now
+            <button className="bg-secondary text-white px-6 py-3 rounded-md font-medium !text-[20px] flex items-center gap-2">
+              <Heart size={20} /> Pledge Now
             </button>
           </div>
         </div>
@@ -239,7 +297,7 @@ export default function Home() {
           {doctors.map((doc) => (
             <div key={doc.name} className="border border-gray-200 rounded-md overflow-hidden text-left">
               <div className="bg-gray-100 aspect-[4/3] flex items-center justify-center">
-                <Eye size={60} className="text-primary/20" />
+                <img src={doc.img} alt={doc.name} className="w-full h-[400px] object-cover" />
               </div>
               <div className="p-5">
                 <h5 className="text-primary mb-1">{doc.name}</h5>
@@ -249,19 +307,23 @@ export default function Home() {
             </div>
           ))}
         </div>
-        <button className="bg-primary text-white px-7 py-3 rounded-md font-medium !text-[16px]">
+        <button className="bg-primary text-white px-7 py-3 rounded-md font-medium !text-[20px]">
           View More
         </button>
       </section>
 
       {/* Research & Education */}
-      <section className="bg-primary text-white">
-        <div className="max-w-[1320px] mx-auto px-4 pt-14 pb-6 grid md:grid-cols-2 gap-8 items-center">
+      <section
+        className="relative bg-primary text-white"
+        style={{ backgroundImage: `url(${heroImg1})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+      >
+        <div className="absolute inset-0 bg-primary/85" />
+        <div className="relative max-w-[1320px] mx-auto px-4 pt-14 pb-6 grid md:grid-cols-2 gap-8 items-center">
           <div>
             <SectionEyebrow>Caring For The Health Of You And Your Family</SectionEyebrow>
             <h2 className="mb-0">We Provide Research & Education</h2>
           </div>
-          <p className="text-gray-300 !text-[16px]">
+          <p className="text-gray-300 !text-[20px]">
             The hospital offers various specialty and super specialty courses for students
             in the field of ophthalmology. There are hundreds of students who have
             completed their post-graduation and other specialty courses from this
@@ -271,25 +333,53 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="bg-[#22326A]">
-          <div className="max-w-[1320px] mx-auto px-4 py-10 grid sm:grid-cols-3 gap-6">
-            {courses.map((c) => (
-              <div key={c.num} className="bg-white text-primary rounded-md p-6 relative">
-                <span className="text-3xl">{c.icon}</span>
-                <span className="absolute top-5 right-5 text-3xl font-bold text-gray-200">{c.num}</span>
-                <h5 className="mt-4 mb-2">{c.title}</h5>
-                <p className="!text-[14px] text-gray-500 mb-4">{c.desc}</p>
-                <a href="#" className="text-secondary font-medium inline-flex items-center gap-1 !text-[14px]">
-                  View More <ArrowRight size={14} />
-                </a>
-              </div>
-            ))}
+        <div className="bg-primary relative" >
+          <div className="max-w-[1320px] mx-auto px-4 py-10 relative">
+            <button
+              onClick={() => setCourseIdx((i) => (i === 0 ? courses.length - 1 : i - 1))}
+              aria-label="Previous course"
+              className="hidden md:flex absolute -left-2 top-1/2 -translate-y-1/2 -translate-x-full text-secondary hover:text-white"
+            >
+              <ChevronLeft size={22} />
+            </button>
+            <button
+              onClick={() => setCourseIdx((i) => (i + 1) % courses.length)}
+              aria-label="Next course"
+              className="hidden md:flex absolute -right-2 top-1/2 -translate-y-1/2 translate-x-full text-secondary hover:text-white"
+            >
+              <ChevronRight size={22} />
+            </button>
+
+            <div className="grid sm:grid-cols-3 gap-6">
+              {visibleCourses.map((c) => (
+                <div key={c.num} className="bg-white text-primary rounded-md p-6 relative ">
+                  <span className="text-5xl">{c.icon}</span>
+                  <span className="absolute top-5 right-5 text-3xl font-bold text-gray-200 text-[60px]">{c.num}</span>
+                  <h5 className="mt-4 mb-2 !text-[24px]">{c.title}</h5>
+                  <p className="!text-[16px] text-gray-500 mb-4">{c.desc}</p>
+                  <a href="#" className="text-secondary font-medium inline-flex items-center gap-1 !text-[14px]">
+                    View More <ArrowRight size={14} />
+                  </a>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex items-center justify-center gap-2 mt-8">
+              {courses.map((c, i) => (
+                <button
+                  key={c.num}
+                  onClick={() => setCourseIdx(i)}
+                  aria-label={`Go to slide ${i + 1}`}
+                  className={`w-2.5 h-2.5 rounded-full transition-colors ${i === courseIdx ? "bg-secondary" : "bg-white/40 hover:bg-white/70"}`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* Inspiring Stories */}
-      <section className="max-w-[1320px] mx-auto px-4 py-16">
+      <section className="max-w-[1320px] mx-auto px-4 py-20">
         <h2 className="text-secondary text-center mb-10">Inspiring Stories!</h2>
 
         <div className="max-w-3xl mx-auto text-center mb-10 relative">
@@ -327,15 +417,16 @@ export default function Home() {
         </div>
 
         <div className="text-center mt-10">
-          <button className="bg-primary text-white px-7 py-3 rounded-full font-medium !text-[16px] inline-flex items-center gap-2">
-            View More <ArrowRight size={16} />
+          <button className="bg-primary text-white px-7 py-3 rounded-full font-medium !text-[20px] inline-flex items-center gap-2">
+            View More <ArrowRight size={20} />
           </button>
         </div>
       </section>
 
       {/* Book Appointment + Donations */}
-      <section className="bg-primary text-white">
-        <div className="max-w-[1320px] mx-auto px-4 py-16 grid md:grid-cols-2 gap-10">
+      <section className="relative bg-primary text-white" style={{ backgroundImage: `url(${heroImg1})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+        <div className="absolute inset-0 bg-primary/85" />
+        <div className="relative max-w-[1320px] mx-auto px-4 py-20 grid md:grid-cols-2 gap-10">
           {/* Form */}
           <div className="bg-white text-primary rounded-md p-7">
             <h4 className="text-secondary mb-2">Book An Appointment</h4>
@@ -355,7 +446,7 @@ export default function Home() {
               <input type="tel" className="border border-gray-300 rounded-md px-4 py-3 !text-[15px]" placeholder="Phone" />
               <input type="email" className="border border-gray-300 rounded-md px-4 py-3 !text-[15px]" placeholder="Email" />
               <textarea className="border border-gray-300 rounded-md px-4 py-3 !text-[15px] sm:col-span-2" rows={3} placeholder="Comments" />
-              <button type="submit" className="bg-primary text-white px-6 py-3 rounded-md font-medium !text-[16px] sm:col-span-2">
+              <button type="submit" className="bg-primary text-white px-6 py-3 rounded-md font-medium !text-[20px] sm:col-span-2">
                 Make Appointment
               </button>
             </form>
@@ -364,11 +455,11 @@ export default function Home() {
           {/* Donations */}
           <div>
             <h3 className="mb-6">Helping Patients From Around the Globe!!</h3>
-            <p className="text-gray-200 !text-[16px] mb-6">
+            <p className="text-gray-200 !text-[20px] mb-6">
               We accept payments by card, cheque, and direct bank transfer.
             </p>
-            <button className="bg-secondary text-white px-6 py-3 rounded-md font-medium !text-[16px] flex items-center gap-2 mb-8">
-              <Heart size={16} /> Make Donation
+            <button className="bg-secondary text-white px-6 py-3 rounded-md font-medium !text-[20px] flex items-center gap-2 mb-8">
+              <Heart size={20} /> Make Donation
             </button>
 
             <p className="!text-[15px] text-gray-300 mb-2">
