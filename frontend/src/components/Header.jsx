@@ -37,7 +37,7 @@ const knowledgeCenterLinks = [
 const eventLinks = [{ label: "Gallery", path: "/gallery" }];
 
 function Dropdown({ label, labelPath, items, isOpen, onToggle, wide }) {
-  const labelClassName = "px-3 py-2 text-[18px] font-medium text-primary hover:text-secondary transition-colors flex items-center gap-1";
+  const labelClassName = "px-3 py-2 text-[18px] font-bold text-primary hover:text-secondary transition-colors flex items-center gap-1";
   return (
     <div className="relative" onMouseEnter={() => onToggle(label)} onMouseLeave={() => onToggle(null)}>
       {labelPath ? (
@@ -61,8 +61,8 @@ function Dropdown({ label, labelPath, items, isOpen, onToggle, wide }) {
             const label = typeof item === "string" ? item : item.label;
             const path = typeof item === "string" ? null : item.path;
             const className = wide
-              ? "block py-2 text-[18px] text-primary hover:text-secondary break-inside-avoid"
-              : "block px-5 py-2 text-[18px] text-primary hover:bg-secondary/10 hover:text-secondary";
+              ? "block py-2 text-[18px] font-bold text-primary hover:text-secondary break-inside-avoid"
+              : "block px-5 py-2 text-[18px] font-bold text-primary hover:bg-secondary/10 hover:text-secondary";
             return path ? (
               <Link key={label} to={path} className={className}>{label}</Link>
             ) : (
@@ -85,7 +85,7 @@ export default function Header() {
     return (
       <Link
         to={path}
-        className={`px-3 py-2 text-[18px] font-medium text-primary hover:text-secondary transition-colors ${active ? "text-secondary" : ""}`}
+        className={`px-3 py-2 text-[18px] font-bold text-primary hover:text-secondary transition-colors ${active ? "text-secondary" : ""}`}
       >
         {label}
       </Link>

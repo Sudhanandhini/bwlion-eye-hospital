@@ -2,12 +2,18 @@ import { useState, useEffect } from "react";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import PageBanner from "../components/PageBanner";
 
-const galleryImages = Object.values(
-  import.meta.glob("../assets/img/event/*.{jpg,jpeg,png}", { eager: true, import: "default" })
-);
-
 export default function Gallery() {
+  const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [activeIndex, setActiveIndex] = useState(null);
+  const galleryImages = images.map((img) => img.image_path);
+
+  useEffect(() => {
+    fetch("/api/gallery")
+      .then((res) => res.json())
+      .then(setImages)
+      .finally(() => setLoading(false));
+  }, []);
 
   const showPrev = () => setActiveIndex((i) => (i === 0 ? galleryImages.length - 1 : i - 1));
   const showNext = () => setActiveIndex((i) => (i === galleryImages.length - 1 ? 0 : i + 1));
@@ -37,18 +43,22 @@ export default function Gallery() {
           </h2>
         </div>
 
-        <div className="columns-1 sm:columns-2 md:columns-3 gap-4">
-          {galleryImages.map((src, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => setActiveIndex(i)}
-              className="block w-full mb-4 break-inside-avoid"
-            >
-              <img src={src} alt={`Gallery ${i + 1}`} className="w-full rounded-md hover:opacity-90 transition-opacity" />
-            </button>
-          ))}
-        </div>
+        {loading ? (
+          <p className="text-gray-500 text-center">Loading...</p>
+        ) : (
+          <div className="columns-1 sm:columns-2 md:columns-3 gap-4">
+            {galleryImages.map((src, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => setActiveIndex(i)}
+                className="block w-full mb-4 break-inside-avoid"
+              >
+                <img src={src} alt={`Gallery ${i + 1}`} className="w-full rounded-md hover:opacity-90 transition-opacity" />
+              </button>
+            ))}
+          </div>
+        )}
       </section>
 
       {activeIndex !== null && (

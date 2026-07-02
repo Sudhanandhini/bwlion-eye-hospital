@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
@@ -19,14 +19,44 @@ import Glaucoma from "./pages/Glaucoma";
 import Gallery from "./pages/Gallery";
 import Career from "./pages/Career";
 import InsuranceClaim from "./pages/InsuranceClaim";
+import AdminLogin from "./admin/AdminLogin";
+import AdminLayout from "./admin/AdminLayout";
+import RequireAdminAuth from "./admin/RequireAdminAuth";
+import DoctorsManager from "./admin/DoctorsManager";
+import GalleryManager from "./admin/GalleryManager";
+import LeadershipManager from "./admin/LeadershipManager";
+
+function PublicLayout() {
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Header />
+      <Outlet />
+      <Footer />
+    </div>
+  );
+}
 
 function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <div className="min-h-screen flex flex-col">
-        <Header />
-        <Routes>
+      <Routes>
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route
+          path="/admin"
+          element={
+            <RequireAdminAuth>
+              <AdminLayout />
+            </RequireAdminAuth>
+          }
+        >
+          <Route index element={<Navigate to="doctors" replace />} />
+          <Route path="doctors" element={<DoctorsManager />} />
+          <Route path="gallery" element={<GalleryManager />} />
+          <Route path="leadership" element={<LeadershipManager />} />
+        </Route>
+
+        <Route element={<PublicLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/contacts" element={<Contact />} />
           <Route path="/vision-mission" element={<VisionMission />} />
@@ -44,9 +74,8 @@ function App() {
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/career" element={<Career />} />
           <Route path="/insurance-claim" element={<InsuranceClaim />} />
-        </Routes>
-        <Footer />
-      </div>
+        </Route>
+      </Routes>
     </BrowserRouter>
   );
 }

@@ -26,9 +26,6 @@ import opticalsPhoto from "../assets/img/Opticals.jpg";
 import pharmacyPhoto from "../assets/img/West-Lions-Pharma.jpg";
 import eyeBankPhoto from "../assets/img/Eye-Bank.jpg";
 import boyReadingBookVideo from "../assets/img/boy-reading-book.mov";
-const galleryThumbs = Object.values(
-  import.meta.glob("../assets/img/event/*.{jpg,jpeg,png}", { eager: true, import: "default" })
-);
 import drMomathaImg from "../assets/img/dr.mamatha.jpg";
 import drRekhaImg from "../assets/img/Dr.-Rekha-Gyanchand.jpg";
 import drRamaDeviImg from "../assets/img/dr.Rama-Devi.jpg";
@@ -107,14 +104,25 @@ function SectionEyebrow({ children }) {
 
 export default function Home() {
   const [testimonialIdx, setTestimonialIdx] = useState(0);
+  const [galleryThumbs, setGalleryThumbs] = useState([]);
   const [galleryIdx, setGalleryIdx] = useState(0);
-  const visibleThumbs = [0, 1, 2, 3].map((offset) => galleryThumbs[(galleryIdx + offset) % galleryThumbs.length]);
+  const visibleThumbs = galleryThumbs.length
+    ? [0, 1, 2, 3].map((offset) => galleryThumbs[(galleryIdx + offset) % galleryThumbs.length])
+    : [];
+
   useEffect(() => {
+    fetch("/api/gallery")
+      .then((res) => res.json())
+      .then((images) => setGalleryThumbs(images.map((img) => img.image_path)));
+  }, []);
+
+  useEffect(() => {
+    if (galleryThumbs.length === 0) return;
     const timer = setInterval(() => {
       setGalleryIdx((i) => (i + 1) % galleryThumbs.length);
     }, 2500);
     return () => clearInterval(timer);
-  }, []);
+  }, [galleryThumbs.length]);
 
   const [courseIdx, setCourseIdx] = useState(0);
   const visibleCourses = [0, 1, 2].map((offset) => courses[(courseIdx + offset) % courses.length]);
