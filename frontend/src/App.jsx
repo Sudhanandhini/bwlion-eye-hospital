@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import ScrollToTop from "./components/ScrollToTop";
 import Home from "./pages/Home";
 import Contact from "./pages/Contact";
 import VisionMission from "./pages/VisionMission";
@@ -22,6 +23,7 @@ import InsuranceClaim from "./pages/InsuranceClaim";
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <div className="min-h-screen flex flex-col">
         <Header />
         <Routes>

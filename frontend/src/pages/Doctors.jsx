@@ -3,6 +3,10 @@ import drMomathaImg from "../assets/img/dr.mamatha.jpg";
 import drRekhaImg from "../assets/img/Dr.-Rekha-Gyanchand.jpg";
 import drRamaDeviImg from "../assets/img/dr.Rama-Devi.jpg";
 import drRachelImg from "../assets/img/dr.Rachel-Joseph.jpg";
+import sahanaImg from "../assets/img/sahana.jpg";
+import varshaImg from "../assets/img/Varsha-Tamrakar.jpg";
+import gururajImg from "../assets/img/gururaj.jpg";
+import lalithaImg from "../assets/img/lalitha.jpg";
 
 const medicalDirector = [
   { name: "Dr. Mamatha B", role: "Medical Director", img: drMomathaImg },
@@ -10,15 +14,16 @@ const medicalDirector = [
 
 const eyeBankTeam = [
   { name: "Dr. Rekha Gyanchand", role: "Medical Director - Eye Bank", img: drRekhaImg },
-  { name: "Dr. Rama Devi K.S", role: "Medical Superintendent", img: drRamaDeviImg },
-  { name: "Dr. Rachel Joseph", role: "Consultant", img: drRachelImg },
+ 
 ];
 
 const consultants = [
-  "Dr. Sahana S Karanth — Consultant, Consultant-Vitreo Retina",
-  "Dr Varsha Tamrakar — Consultant, Pediatric Consultant",
-  "Dr. Gururaj N Deshpande — Consultant, Consultant-Vitreo Retina",
-  "Dr. Lalitha C S — Consultant",
+   { name: "Dr. Rama Devi K.S", role: "Medical Superintendent", img: drRamaDeviImg },
+  { name: "Dr. Rachel Joseph", role: "Consultant", img: drRachelImg },
+  { name: "Dr. Sahana S Karanth", role: "Consultant, Consultant-Vitreo Retina", img: sahanaImg },
+  { name: "Dr Varsha Tamrakar", role: "Consultant, Pediatric Consultant", img: varshaImg },
+  { name: "Dr. Gururaj N Deshpande", role: "Consultant, Consultant-Vitreo Retina", img: gururajImg },
+  { name: "Dr. Lalitha C S", role: "Consultant", img: lalithaImg },
 ];
 
 function DoctorCard({ name, role, img }) {
@@ -55,18 +60,29 @@ export default function Doctors() {
               <DoctorCard key={doc.name} {...doc} />
             ))}
           </div>
-          <div className="space-y-4">
-            {consultants.map((c) => {
-              const [name, role] = c.split(" — ");
-              return (
-                <div key={name} className="border border-gray-200 rounded-md p-5 text-left">
-                  <h5 className="text-primary mb-1">{name}</h5>
-                  <p className="!text-[14px] text-secondary">{role}</p>
-                </div>
-              );
-            })}
-          </div>
+          {/* <div className="space-y-6">
+            {consultants.map((doc) => (
+              <DoctorCard key={doc.name} {...doc} />
+            ))}
+          </div> */}
         </div>
+
+
+          <h4 className="text-primary my-6">Medical Consultants</h4>
+        <div className="grid md:grid-cols-4 gap-8">
+          <div className="grid sm:grid-cols-4 md:col-span-4 gap-6">
+            {consultants.map((doc) => (
+              <DoctorCard key={doc.name} {...doc} />
+            ))}
+          </div>
+          {/* <div className="space-y-6">
+            {consultants.map((doc) => (
+              <DoctorCard key={doc.name} {...doc} />
+            ))}
+          </div> */}
+        </div>
+
+
       </section>
     </main>
   );

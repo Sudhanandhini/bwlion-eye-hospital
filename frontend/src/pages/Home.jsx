@@ -129,12 +129,12 @@ export default function Home() {
     <main>
       {/* Hero */}
       <section
-        className="bg-[#FAF1DC] bg-no-repeat bg-cover bg-right h-[700px] flex items-center"
+        className="bg-[#FAF1DC] bg-no-repeat bg-cover bg-center md:bg-right min-h-[560px] md:h-[700px] flex items-center py-12 md:py-0"
         style={{ backgroundImage: `url(${heroImg})` }}
       >
         <div className="max-w-[1320px] mx-auto px-4 w-full">
-          <div className="max-w-lg">
-            <h1 className="text-primary !mb-8 leading-tight font-semibold" style={{ fontSize: '60px'}}>
+          <div className="max-w-lg bg-[#FAF1DC]/90 md:bg-transparent rounded-lg p-5 sm:p-6 md:p-0">
+            <h1 className="text-primary !mb-8 leading-tight font-semibold text-[32px] sm:text-[42px] md:text-[52px] lg:text-[60px]">
               Experience World Class Eye Care
             </h1>
             <p className="text-gray-600 mb-7 max-w-md font-semibold">
