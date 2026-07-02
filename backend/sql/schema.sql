@@ -42,3 +42,12 @@ CREATE TABLE IF NOT EXISTS trustees (
   type ENUM('hereditary', 'life') NOT NULL,
   sort_order INT NOT NULL DEFAULT 0
 );
+
+CREATE TABLE IF NOT EXISTS career_jobs (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  location VARCHAR(150) NOT NULL,
+  title VARCHAR(200) NOT NULL,
+  details TEXT,
+  sort_order INT NOT NULL DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

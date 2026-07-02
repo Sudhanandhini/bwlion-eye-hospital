@@ -10,7 +10,7 @@ const GROUP_LABELS = {
 function DoctorCard({ name, role, image_path }) {
   return (
     <div className="border border-gray-200 rounded-md overflow-hidden text-left">
-      <div className="aspect-[4/3] overflow-hidden bg-gray-100">
+      <div className=" overflow-hidden bg-gray-100 h-[300px] flex items-center justify-center">
         <img src={image_path} alt={name} className="w-full h-full object-cover" />
       </div>
       <div className="p-5">

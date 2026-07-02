@@ -25,6 +25,7 @@ import RequireAdminAuth from "./admin/RequireAdminAuth";
 import DoctorsManager from "./admin/DoctorsManager";
 import GalleryManager from "./admin/GalleryManager";
 import LeadershipManager from "./admin/LeadershipManager";
+import CareerManager from "./admin/CareerManager";
 
 function PublicLayout() {
   return (
@@ -54,6 +55,7 @@ function App() {
           <Route path="doctors" element={<DoctorsManager />} />
           <Route path="gallery" element={<GalleryManager />} />
           <Route path="leadership" element={<LeadershipManager />} />
+          <Route path="career" element={<CareerManager />} />
         </Route>
 
         <Route element={<PublicLayout />}>

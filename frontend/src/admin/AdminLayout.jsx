@@ -6,6 +6,7 @@ const navItems = [
   { to: "/admin/doctors", label: "Doctors" },
   { to: "/admin/gallery", label: "Gallery" },
   { to: "/admin/leadership", label: "Leadership" },
+  { to: "/admin/career", label: "Career" },
 ];
 
 export default function AdminLayout() {

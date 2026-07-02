@@ -56,6 +56,29 @@ const lifeTrustees = [
   "Ms. Akhila Bindumalyam Nandakumar", "Lion Radhakrishna",
 ];
 
+const careerJobsData = [
+  {
+    location: "Chintamani",
+    title: "Consultant",
+    details: "Experience - 1 to 3 years\nNo of Positions : 1 No\nContact person- HR\nMail- hr@bwlionseyehospital.org",
+  },
+  {
+    location: "Chintamani",
+    title: "Optometrist",
+    details: "Experienced candidates are preferred\nNo of Positions : 1 No Salary according to industrial standards\nPlease contact:\n- HR- Contact No:9113607492\nMail- hr@bwlionseyehospital.org",
+  },
+  {
+    location: "JC Road",
+    title: "Patient Counsellor ( Only females )",
+    details: "Age : 25 – 35\nQualification : Any Degree\nExperience : 2 to 3 years\nNotice Period : Less than 1 month\nLanguage Known : Kannada, English, Hindi.\nPlease contact:\nContact No: 9113607492\nMail Id: hr@bwlionseyehospital.org",
+  },
+  {
+    location: "JC Road",
+    title: "OT Assistant",
+    details: "Qualification : Any Degree\nSalary : As per industry standards.\nPlease contact:\nContact No: 9113607492\nMail Id: hr@bwlionseyehospital.org",
+  },
+];
+
 async function seed() {
   console.log("Seeding admin user...");
   const passwordHash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10);
@@ -111,7 +134,19 @@ async function seed() {
     );
   }
 
-  console.log(`Seed complete: ${doctorsData.length} doctors, ${leadershipData.length} leadership, ${hereditaryTrustees.length + lifeTrustees.length} trustees, ${files.length} gallery images.`);
+  console.log("Seeding career jobs...");
+  await pool.query("DELETE FROM career_jobs");
+  const careerCounters = {};
+  for (const j of careerJobsData) {
+    const order = careerCounters[j.location] || 0;
+    careerCounters[j.location] = order + 1;
+    await pool.query(
+      "INSERT INTO career_jobs (location, title, details, sort_order) VALUES (?, ?, ?, ?)",
+      [j.location, j.title, j.details, order]
+    );
+  }
+
+  console.log(`Seed complete: ${doctorsData.length} doctors, ${leadershipData.length} leadership, ${hereditaryTrustees.length + lifeTrustees.length} trustees, ${files.length} gallery images, ${careerJobsData.length} career jobs.`);
   await pool.end();
 }
 

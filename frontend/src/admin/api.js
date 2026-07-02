@@ -58,4 +58,11 @@ export const api = {
   deleteTrustee: (id) => request(`/trustees/${id}`, { method: "DELETE" }),
   reorderTrustees: (type, orderedIds) =>
     request("/trustees/reorder/positions", { method: "PUT", body: { type, orderedIds } }),
+
+  getCareerJobs: () => request("/career"),
+  createCareerJob: (job) => request("/career", { method: "POST", body: job }),
+  updateCareerJob: (id, job) => request(`/career/${id}`, { method: "PUT", body: job }),
+  deleteCareerJob: (id) => request(`/career/${id}`, { method: "DELETE" }),
+  reorderCareerJobs: (location, orderedIds) =>
+    request("/career/reorder/positions", { method: "PUT", body: { location, orderedIds } }),
 };

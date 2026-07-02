@@ -1,48 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronRight, ChevronDown } from "lucide-react";
 import PageBanner from "../components/PageBanner";
 import hospitalImg from "../assets/img/Hospital-1111 (1).jpg";
 
-const chintamaniJobs = [
-  {
-    title: "Consultant",
-    lines: ["Experience - 1 to 3 years", "No of Positions : 1 No", "Contact person- HR", "Mail- hr@bwlionseyehospital.org"],
-  },
-  {
-    title: "Optometrist",
-    lines: [
-      "Experienced candidates are preferred",
-      "No of Positions : 1 No Salary according to industrial standards",
-      "Please contact:\n- HR- Contact No:9113607492\nMail- hr@bwlionseyehospital.org",
-    ],
-  },
-];
-
-const jcRoadJobs = [
-  {
-    title: "Patient Counsellor ( Only females )",
-    lines: [
-      "Age : 25 – 35",
-      "Qualification : Any Degree",
-      "Experience : 2 to 3 years",
-      "Notice Period : Less than 1 month",
-      "Language Known : Kannada, English, Hindi.",
-      "Please contact:\nContact No: 9113607492\nMail Id: hr@bwlionseyehospital.org",
-    ],
-  },
-  {
-    title: "OT Assistant",
-    lines: [
-      "Qualification : Any Degree",
-      "Salary : As per industry standards.",
-      "Please contact:",
-      "Contact No: 9113607492",
-      "Mail Id: hr@bwlionseyehospital.org",
-    ],
-  },
-];
-
-function JobItem({ title, lines, defaultOpen = false }) {
+function JobItem({ title, details, defaultOpen = false }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
     <div className="border-b border-gray-200 py-4">
@@ -56,10 +17,8 @@ function JobItem({ title, lines, defaultOpen = false }) {
         <span className="text-secondary font-semibold !text-[18px]">{title}</span>
       </button>
       {open && (
-        <div className="mt-3 pl-9 space-y-3">
-          {lines.map((line, i) => (
-            <p key={i} className="text-gray-600 !text-[15px] whitespace-pre-line">{line}</p>
-          ))}
+        <div className="mt-3 pl-9">
+          <p className="text-gray-600 !text-[18px] whitespace-pre-line">{details}</p>
         </div>
       )}
     </div>
@@ -67,6 +26,18 @@ function JobItem({ title, lines, defaultOpen = false }) {
 }
 
 export default function Career() {
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/career")
+      .then((res) => res.json())
+      .then(setJobs)
+      .finally(() => setLoading(false));
+  }, []);
+
+  const locations = [...new Set(jobs.map((j) => j.location))];
+
   return (
     <main>
       <PageBanner title="Career" crumb="Career" />
@@ -75,10 +46,10 @@ export default function Career() {
         <div className="grid md:grid-cols-2 gap-10 items-start mb-16">
           <div>
             <h4 className="text-primary mb-4">Why B W Lions Super Speciality Eye Hospital?</h4>
-            <p className="text-gray-600 !text-[15px] mb-4">
+            <p className="text-gray-600 !text-[18px] mb-4">
               We believe in providing world-class eye care services to all segments of society.
             </p>
-            <p className="text-gray-600 !text-[15px] mb-6">
+            <p className="text-gray-600 !text-[18px] mb-6">
               We always look out for passionate and dynamic skilled individuals to join our team
               and take the next step in their careers with teamwork. We have achieved creating a
               conducive working environment that helps each employee grow professionally which
@@ -93,30 +64,30 @@ export default function Career() {
              
                 <div>
                   <label className="block text-secondary font-medium !text-[14px] mb-2">Position</label>
-                  <input type="text" className="w-full border border-gray-300 rounded-full px-4 py-3 !text-[15px] focus:outline-none focus:border-primary" />
+                  <input type="text" className="w-full border border-gray-300 rounded-full px-4 py-3 !text-[18px] focus:outline-none focus:border-primary" />
                 </div>
                 <div>
                   <label className="block text-secondary font-medium !text-[14px] mb-2">Apply Now</label>
-                  <input type="text" className="w-full border border-gray-300 rounded-full px-4 py-3 !text-[15px] focus:outline-none focus:border-primary" />
+                  <input type="text" className="w-full border border-gray-300 rounded-full px-4 py-3 !text-[18px] focus:outline-none focus:border-primary" />
                 </div>
           
               <div>
                 <label className="block text-secondary font-medium !text-[14px] mb-2">Name</label>
-                <input type="text" className="w-full border border-gray-300 rounded-full px-4 py-3 !text-[15px] focus:outline-none focus:border-primary" />
+                <input type="text" className="w-full border border-gray-300 rounded-full px-4 py-3 !text-[18px] focus:outline-none focus:border-primary" />
               </div>
             
                 <div>
                   <label className="block text-secondary font-medium !text-[14px] mb-2">Mail Id</label>
-                  <input type="email" className="w-full border border-gray-300 rounded-full px-4 py-3 !text-[15px] focus:outline-none focus:border-primary" />
+                  <input type="email" className="w-full border border-gray-300 rounded-full px-4 py-3 !text-[18px] focus:outline-none focus:border-primary" />
                 </div>
                 <div>
                   <label className="block text-secondary font-medium !text-[14px] mb-2">Phone Number</label>
-                  <input type="tel" className="w-full border border-gray-300 rounded-full px-4 py-3 !text-[15px] focus:outline-none focus:border-primary" />
+                  <input type="tel" className="w-full border border-gray-300 rounded-full px-4 py-3 !text-[18px] focus:outline-none focus:border-primary" />
                 </div>
 
                  <div>
                   <label className="block text-secondary font-medium !text-[14px] mb-2">Location</label>
-                  <input type="tel" className="w-full border border-gray-300 rounded-full px-4 py-3 !text-[15px] focus:outline-none focus:border-primary" />
+                  <input type="tel" className="w-full border border-gray-300 rounded-full px-4 py-3 !text-[18px] focus:outline-none focus:border-primary" />
                 </div>
             
               <button
@@ -129,24 +100,26 @@ export default function Career() {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-16">
-          <div>
-            <h3 className="text-secondary mb-6">Current Openings in Chintamani</h3>
-            <div>
-              {chintamaniJobs.map((job) => (
-                <JobItem key={job.title} title={job.title} lines={job.lines} defaultOpen={job.title === "Consultant"} />
-              ))}
-            </div>
+        {loading ? (
+          <p className="text-gray-500 text-center">Loading...</p>
+        ) : locations.length === 0 ? (
+          <p className="text-gray-400 text-center">No current openings.</p>
+        ) : (
+          <div className="grid md:grid-cols-2 gap-16">
+            {locations.map((loc) => (
+              <div key={loc}>
+                <h3 className="text-secondary mb-6">Current Openings in {loc}</h3>
+                <div>
+                  {jobs
+                    .filter((j) => j.location === loc)
+                    .map((job) => (
+                      <JobItem key={job.id} title={job.title} details={job.details} />
+                    ))}
+                </div>
+              </div>
+            ))}
           </div>
-          <div>
-            <h3 className="text-secondary mb-6">Current Openings on JC Road</h3>
-            <div>
-              {jcRoadJobs.map((job) => (
-                <JobItem key={job.title} title={job.title} lines={job.lines} defaultClose />
-              ))}
-            </div>
-          </div>
-        </div>
+        )}
       </section>
     </main>
   );
