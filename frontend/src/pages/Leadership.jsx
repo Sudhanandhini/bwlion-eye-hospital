@@ -77,7 +77,7 @@ export default function Leadership() {
       <PageBanner title="Leadership" crumb="Leadership" />
 
       <section className="max-w-[1320px] mx-auto px-4 py-16">
-        <p className="text-gray-600 mb-14 max-w-4xl">
+        <p className="text-gray-600 mb-14 ">
           Bangalore West Super Specialty Eye Hospital is a dream of many visionaries founded with
           the mission of conquering blindness that has been haunting the livelihoods of many,
           especially in Rural India. The reputation of the Hospital has been built with the

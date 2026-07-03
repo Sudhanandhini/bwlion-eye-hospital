@@ -9,6 +9,8 @@ const galleryRoutes = require("./routes/gallery");
 const leadershipRoutes = require("./routes/leadership");
 const trusteesRoutes = require("./routes/trustees");
 const careerRoutes = require("./routes/career");
+const appointmentsRoutes = require("./routes/appointments");
+const jobApplicationsRoutes = require("./routes/jobApplications");
 
 const app = express();
 
@@ -22,6 +24,8 @@ app.use("/api/gallery", galleryRoutes);
 app.use("/api/leadership", leadershipRoutes);
 app.use("/api/trustees", trusteesRoutes);
 app.use("/api/career", careerRoutes);
+app.use("/api/appointments", appointmentsRoutes);
+app.use("/api/job-applications", jobApplicationsRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err);

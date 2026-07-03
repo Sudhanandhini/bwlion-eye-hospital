@@ -18,8 +18,8 @@ export default function AdminLayout() {
   };
 
   return (
-    <div className="min-h-screen flex bg-gray-50">
-      <aside className="w-60 bg-primary text-white flex-shrink-0 flex flex-col">
+    <div className="min-h-screen bg-gray-50">
+      <aside className="w-60 bg-primary text-white flex flex-col fixed left-0 top-0 h-screen overflow-y-auto">
         <div className="p-5 border-b border-white/10">
           <p className="font-bold !text-[18px]">Admin Panel</p>
           <p className="text-gray-300 !text-[13px]">BW Lions Eye Hospital</p>
@@ -46,7 +46,7 @@ export default function AdminLayout() {
           <LogOut size={16} /> Logout
         </button>
       </aside>
-      <main className="flex-1 p-8 overflow-auto">
+      <main className="ml-60 p-8">
         <Outlet />
       </main>
     </div>

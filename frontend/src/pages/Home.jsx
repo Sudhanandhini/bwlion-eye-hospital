@@ -133,6 +133,37 @@ export default function Home() {
     return () => clearInterval(timer);
   }, []);
 
+  const [appointmentForm, setAppointmentForm] = useState({
+    hospital: "", date: "", time: "", name: "", age: "", phone: "", email: "", comments: "",
+  });
+  const [appointmentStatus, setAppointmentStatus] = useState("idle");
+  const [appointmentError, setAppointmentError] = useState("");
+
+  const handleAppointmentChange = (e) => {
+    const { name, value } = e.target;
+    setAppointmentForm((f) => ({ ...f, [name]: value }));
+  };
+
+  const submitAppointment = async (e) => {
+    e.preventDefault();
+    setAppointmentStatus("sending");
+    setAppointmentError("");
+    try {
+      const res = await fetch("/api/appointments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(appointmentForm),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Something went wrong");
+      setAppointmentStatus("success");
+      setAppointmentForm({ hospital: "", date: "", time: "", name: "", age: "", phone: "", email: "", comments: "" });
+    } catch (err) {
+      setAppointmentStatus("error");
+      setAppointmentError(err.message);
+    }
+  };
+
   return (
     <main>
       {/* Hero */}
@@ -474,21 +505,39 @@ export default function Home() {
               best treatment! BW shall send you confirmation of the hospital. Kindly book an
               appointment by filling the form.
             </p>
-            <form className="grid grid-cols-1 sm:grid-cols-2 gap-4" onSubmit={(e) => e.preventDefault()}>
-              <select className="border border-gray-300 rounded-md px-4 py-3 !text-[15px] sm:col-span-2">
-                <option>Select Hospital</option>
+            <form className="grid grid-cols-1 sm:grid-cols-2 gap-4" onSubmit={submitAppointment}>
+              {appointmentStatus === "success" && (
+                <p className="sm:col-span-2 text-green-600 !text-[14px]">
+                  Thank you! Your appointment request has been sent.
+                </p>
+              )}
+              {appointmentStatus === "error" && (
+                <p className="sm:col-span-2 text-red-600 !text-[14px]">{appointmentError}</p>
+              )}
+              <select
+                name="hospital"
+                value={appointmentForm.hospital}
+                onChange={handleAppointmentChange}
+                className="border border-gray-300 rounded-md px-4 py-3 !text-[15px] sm:col-span-2"
+              >
+                <option value="">Select Hospital</option>
+                <option>Bangalore </option>
+                <option>Kollegala</option>
+                
               </select>
-              <input type="date" className="border border-gray-300 rounded-md px-4 py-3 !text-[15px]" placeholder="Select Date" />
-              <input type="time" className="border border-gray-300 rounded-md px-4 py-3 !text-[15px]" placeholder="Select Time" />
-              <input type="text" className="border border-gray-300 rounded-md px-4 py-3 !text-[15px]" placeholder="Name" />
-              <input type="number" className="border border-gray-300 rounded-md px-4 py-3 !text-[15px]" placeholder="Age" />
-              <input type="tel" className="border border-gray-300 rounded-md px-4 py-3 !text-[15px]" placeholder="Phone" />
-              <input type="email" className="border border-gray-300 rounded-md px-4 py-3 !text-[15px]" placeholder="Email" />
-              <textarea className="border border-gray-300 rounded-md px-4 py-3 !text-[15px] sm:col-span-2" rows={3} placeholder="Comments" />
-              <button type="submit" className="bg-primary text-white px-6 py-3 rounded-md font-medium !text-[20px] sm:col-span-2">
-                <a href="/contacts" className="text-white hover:text-primary">
-                  Make Appointment
-                </a>
+              <input type="date" name="date" value={appointmentForm.date} onChange={handleAppointmentChange} className="border border-gray-300 rounded-md px-4 py-3 !text-[15px]" placeholder="Select Date" />
+              <input type="time" name="time" value={appointmentForm.time} onChange={handleAppointmentChange} className="border border-gray-300 rounded-md px-4 py-3 !text-[15px]" placeholder="Select Time" />
+              <input type="text" name="name" value={appointmentForm.name} onChange={handleAppointmentChange} className="border border-gray-300 rounded-md px-4 py-3 !text-[15px]" placeholder="Name" required />
+              <input type="number" name="age" value={appointmentForm.age} onChange={handleAppointmentChange} className="border border-gray-300 rounded-md px-4 py-3 !text-[15px]" placeholder="Age" />
+              <input type="tel" name="phone" value={appointmentForm.phone} onChange={handleAppointmentChange} className="border border-gray-300 rounded-md px-4 py-3 !text-[15px]" placeholder="Phone" required />
+              <input type="email" name="email" value={appointmentForm.email} onChange={handleAppointmentChange} className="border border-gray-300 rounded-md px-4 py-3 !text-[15px]" placeholder="Email" />
+              <textarea name="comments" value={appointmentForm.comments} onChange={handleAppointmentChange} className="border border-gray-300 rounded-md px-4 py-3 !text-[15px] sm:col-span-2" rows={3} placeholder="Comments" />
+              <button
+                type="submit"
+                disabled={appointmentStatus === "sending"}
+                className="bg-primary text-white px-6 py-3 rounded-md font-medium !text-[20px] sm:col-span-2 disabled:opacity-60"
+              >
+                {appointmentStatus === "sending" ? "Sending..." : "Make Appointment"}
               </button>
             </form>
           </div>

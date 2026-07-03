@@ -38,6 +38,34 @@ export default function Career() {
 
   const locations = [...new Set(jobs.map((j) => j.location))];
 
+  const [applyForm, setApplyForm] = useState({
+    position: "", applyNow: "", name: "", email: "", phone: "", location: "",
+  });
+  const [applyStatus, setApplyStatus] = useState("idle");
+  const [applyError, setApplyError] = useState("");
+
+  const setApplyField = (e) => setApplyForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+
+  const submitApplication = async (e) => {
+    e.preventDefault();
+    setApplyStatus("sending");
+    setApplyError("");
+    try {
+      const res = await fetch("/api/job-applications", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(applyForm),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Something went wrong");
+      setApplyStatus("success");
+      setApplyForm({ position: "", applyNow: "", name: "", email: "", phone: "", location: "" });
+    } catch (err) {
+      setApplyStatus("error");
+      setApplyError(err.message);
+    }
+  };
+
   return (
     <main>
       <PageBanner title="Career" crumb="Career" />
@@ -60,41 +88,47 @@ export default function Career() {
 
           <div>
             <h3 className="text-secondary mb-6">Apply Now</h3>
-            <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
-             
-                <div>
-                  <label className="block text-secondary font-medium !text-[14px] mb-2">Position</label>
-                  <input type="text" className="w-full border border-gray-300 rounded-full px-4 py-3 !text-[18px] focus:outline-none focus:border-primary" />
-                </div>
-                <div>
-                  <label className="block text-secondary font-medium !text-[14px] mb-2">Apply Now</label>
-                  <input type="text" className="w-full border border-gray-300 rounded-full px-4 py-3 !text-[18px] focus:outline-none focus:border-primary" />
-                </div>
-          
+            <form className="space-y-5" onSubmit={submitApplication}>
+              {applyStatus === "success" && (
+                <p className="text-green-600 !text-[14px]">Thank you! Your application has been sent.</p>
+              )}
+              {applyStatus === "error" && (
+                <p className="text-red-600 !text-[14px]">{applyError}</p>
+              )}
+              <div>
+                <label className="block text-secondary font-medium !text-[14px] mb-2">Position</label>
+                <input type="text" name="position" value={applyForm.position} onChange={setApplyField} className="w-full border border-gray-300 rounded-full px-4 py-3 !text-[18px] focus:outline-none focus:border-primary" />
+              </div>
+              {/* <div>
+                <label className="block text-secondary font-medium !text-[14px] mb-2">Apply Now</label>
+                <input type="text" name="applyNow" value={applyForm.applyNow} onChange={setApplyField} className="w-full border border-gray-300 rounded-full px-4 py-3 !text-[18px] focus:outline-none focus:border-primary" />
+              </div> */}
+
               <div>
                 <label className="block text-secondary font-medium !text-[14px] mb-2">Name</label>
-                <input type="text" className="w-full border border-gray-300 rounded-full px-4 py-3 !text-[18px] focus:outline-none focus:border-primary" />
+                <input type="text" name="name" value={applyForm.name} onChange={setApplyField} className="w-full border border-gray-300 rounded-full px-4 py-3 !text-[18px] focus:outline-none focus:border-primary" required />
               </div>
-            
-                <div>
-                  <label className="block text-secondary font-medium !text-[14px] mb-2">Mail Id</label>
-                  <input type="email" className="w-full border border-gray-300 rounded-full px-4 py-3 !text-[18px] focus:outline-none focus:border-primary" />
-                </div>
-                <div>
-                  <label className="block text-secondary font-medium !text-[14px] mb-2">Phone Number</label>
-                  <input type="tel" className="w-full border border-gray-300 rounded-full px-4 py-3 !text-[18px] focus:outline-none focus:border-primary" />
-                </div>
 
-                 <div>
-                  <label className="block text-secondary font-medium !text-[14px] mb-2">Location</label>
-                  <input type="tel" className="w-full border border-gray-300 rounded-full px-4 py-3 !text-[18px] focus:outline-none focus:border-primary" />
-                </div>
-            
+              <div>
+                <label className="block text-secondary font-medium !text-[14px] mb-2">Mail Id</label>
+                <input type="email" name="email" value={applyForm.email} onChange={setApplyField} className="w-full border border-gray-300 rounded-full px-4 py-3 !text-[18px] focus:outline-none focus:border-primary" />
+              </div>
+              <div>
+                <label className="block text-secondary font-medium !text-[14px] mb-2">Phone Number</label>
+                <input type="tel" name="phone" value={applyForm.phone} onChange={setApplyField} className="w-full border border-gray-300 rounded-full px-4 py-3 !text-[18px] focus:outline-none focus:border-primary" />
+              </div>
+
+              <div>
+                <label className="block text-secondary font-medium !text-[14px] mb-2">Location</label>
+                <input type="text" name="location" value={applyForm.location} onChange={setApplyField} className="w-full border border-gray-300 rounded-full px-4 py-3 !text-[18px] focus:outline-none focus:border-primary" />
+              </div>
+
               <button
                 type="submit"
-                className="bg-primary text-white px-7 py-3 rounded-md font-medium !text-[16px] hover:bg-primary/90"
+                disabled={applyStatus === "sending"}
+                className="bg-primary text-white px-7 py-3 rounded-md font-medium !text-[16px] hover:bg-primary/90 disabled:opacity-60"
               >
-                Submit
+                {applyStatus === "sending" ? "Sending..." : "Submit"}
               </button>
             </form>
           </div>

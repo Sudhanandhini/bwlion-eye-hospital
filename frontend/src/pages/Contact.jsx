@@ -63,8 +63,30 @@ export default function Contact() {
   const [form, setForm] = useState({
     hospital: "", date: "", time: "", name: "", age: "", phone: "", email: "", comments: "",
   });
+  const [status, setStatus] = useState("idle");
+  const [error, setError] = useState("");
 
   const set = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+
+  const submit = async (e) => {
+    e.preventDefault();
+    setStatus("sending");
+    setError("");
+    try {
+      const res = await fetch("/api/appointments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Something went wrong");
+      setStatus("success");
+      setForm({ hospital: "", date: "", time: "", name: "", age: "", phone: "", email: "", comments: "" });
+    } catch (err) {
+      setStatus("error");
+      setError(err.message);
+    }
+  };
 
   return (
     <main>
@@ -141,7 +163,13 @@ export default function Contact() {
                 an appointment by filling the form below.
               </p>
 
-              <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+              <form className="space-y-4" onSubmit={submit}>
+                {status === "success" && (
+                  <p className="text-green-600 !text-[14px]">Thank you! Your appointment request has been sent.</p>
+                )}
+                {status === "error" && (
+                  <p className="text-red-600 !text-[14px]">{error}</p>
+                )}
                 {/* Select Hospital */}
                 <div className="relative">
                   <select
@@ -151,10 +179,10 @@ export default function Contact() {
                     className="w-full border border-gray-300 rounded-md px-4 py-3 !text-[15px] text-gray-500 appearance-none focus:outline-none focus:border-primary"
                   >
                     <option value="">Select Hospital</option>
-                    <option>Bangalore West Lions Super Speciality Eye Hospital</option>
-                    <option>Bangalore West Lions Sri Vidyasagar Oswal Institute</option>
-                    <option>Lions Eye Hospital, Kollegala</option>
-                    <option>B W Lions Super Speciality Eye Hospital, Chintamani</option>
+                    <option>Bangalore </option>
+               
+                    <option>Kollegala</option>
+             
                   </select>
                   <div className="absolute right-3 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-primary flex items-center justify-center pointer-events-none">
                     <ChevronDown size={14} className="text-white" />
@@ -210,9 +238,10 @@ export default function Contact() {
                 {/* Submit */}
                 <button
                   type="submit"
-                  className="w-full bg-primary text-white py-3.5 rounded-full font-semibold !text-[16px] flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors"
+                  disabled={status === "sending"}
+                  className="w-full bg-primary text-white py-3.5 rounded-full font-semibold !text-[16px] flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors disabled:opacity-60"
                 >
-                  Make Appointment <ArrowRight size={16} />
+                  {status === "sending" ? "Sending..." : "Make Appointment"} <ArrowRight size={16} />
                 </button>
               </form>
             </div>
