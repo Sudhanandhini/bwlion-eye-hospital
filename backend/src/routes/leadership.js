@@ -1,10 +1,12 @@
 const express = require("express");
 const pool = require("../db");
 const requireAuth = require("../middleware/auth");
+const { requireRole } = require("../middleware/auth");
 const makeUploader = require("../upload");
 
 const router = express.Router();
 const upload = makeUploader("leadership");
+const requireAdmin = requireRole("admin");
 
 router.get("/", async (req, res) => {
   const [rows] = await pool.query(
@@ -13,7 +15,7 @@ router.get("/", async (req, res) => {
   res.json(rows);
 });
 
-router.post("/", requireAuth, upload.single("image"), async (req, res) => {
+router.post("/", requireAuth, requireAdmin, upload.single("image"), async (req, res) => {
   const { name, role, group_name } = req.body;
   if (!name || !role || !group_name) {
     return res.status(400).json({ error: "name, role, and group_name are required" });
@@ -31,7 +33,7 @@ router.post("/", requireAuth, upload.single("image"), async (req, res) => {
   res.status(201).json(row);
 });
 
-router.put("/:id", requireAuth, upload.single("image"), async (req, res) => {
+router.put("/:id", requireAuth, requireAdmin, upload.single("image"), async (req, res) => {
   const { name, role, group_name } = req.body;
   const [[existing]] = await pool.query("SELECT * FROM leadership WHERE id = ?", [req.params.id]);
   if (!existing) return res.status(404).json({ error: "Not found" });
@@ -45,12 +47,12 @@ router.put("/:id", requireAuth, upload.single("image"), async (req, res) => {
   res.json(row);
 });
 
-router.delete("/:id", requireAuth, async (req, res) => {
+router.delete("/:id", requireAuth, requireAdmin, async (req, res) => {
   await pool.query("DELETE FROM leadership WHERE id = ?", [req.params.id]);
   res.status(204).end();
 });
 
-router.put("/reorder/positions", requireAuth, async (req, res) => {
+router.put("/reorder/positions", requireAuth, requireAdmin, async (req, res) => {
   const { group_name, orderedIds } = req.body;
   if (!group_name || !Array.isArray(orderedIds)) {
     return res.status(400).json({ error: "group_name and orderedIds[] are required" });

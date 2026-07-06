@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "./api";
-import { setToken } from "./auth";
+import { setToken, setRole } from "./auth";
 
 export default function AdminLogin() {
   const [username, setUsername] = useState("");
@@ -15,8 +15,9 @@ export default function AdminLogin() {
     setError("");
     setLoading(true);
     try {
-      const { token } = await api.login(username, password);
+      const { token, role } = await api.login(username, password);
       setToken(token);
+      setRole(role);
       navigate("/admin/doctors", { replace: true });
     } catch (err) {
       setError(err.message);

@@ -1,15 +1,17 @@
 const express = require("express");
 const pool = require("../db");
 const requireAuth = require("../middleware/auth");
+const { requireRole } = require("../middleware/auth");
 
 const router = express.Router();
+const requireAdmin = requireRole("admin");
 
 router.get("/", async (req, res) => {
   const [rows] = await pool.query("SELECT * FROM trustees ORDER BY type, sort_order, id");
   res.json(rows);
 });
 
-router.post("/", requireAuth, async (req, res) => {
+router.post("/", requireAuth, requireAdmin, async (req, res) => {
   const { name, type } = req.body;
   if (!name || !type) return res.status(400).json({ error: "name and type are required" });
 
@@ -25,19 +27,19 @@ router.post("/", requireAuth, async (req, res) => {
   res.status(201).json(row);
 });
 
-router.put("/:id", requireAuth, async (req, res) => {
+router.put("/:id", requireAuth, requireAdmin, async (req, res) => {
   const { name } = req.body;
   await pool.query("UPDATE trustees SET name = ? WHERE id = ?", [name, req.params.id]);
   const [[row]] = await pool.query("SELECT * FROM trustees WHERE id = ?", [req.params.id]);
   res.json(row);
 });
 
-router.delete("/:id", requireAuth, async (req, res) => {
+router.delete("/:id", requireAuth, requireAdmin, async (req, res) => {
   await pool.query("DELETE FROM trustees WHERE id = ?", [req.params.id]);
   res.status(204).end();
 });
 
-router.put("/reorder/positions", requireAuth, async (req, res) => {
+router.put("/reorder/positions", requireAuth, requireAdmin, async (req, res) => {
   const { type, orderedIds } = req.body;
   if (!type || !Array.isArray(orderedIds)) {
     return res.status(400).json({ error: "type and orderedIds[] are required" });

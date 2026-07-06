@@ -20,6 +20,10 @@ import Glaucoma from "./pages/Glaucoma";
 import Gallery from "./pages/Gallery";
 import Career from "./pages/Career";
 import InsuranceClaim from "./pages/InsuranceClaim";
+import DnbProgram from "./pages/DnbProgram";
+import FellowshipPrograms from "./pages/FellowshipPrograms";
+import BScOptometry from "./pages/BScOptometry";
+import DiplomaOphthalmicTechnology from "./pages/DiplomaOphthalmicTechnology";
 import AdminLogin from "./admin/AdminLogin";
 import AdminLayout from "./admin/AdminLayout";
 import RequireAdminAuth from "./admin/RequireAdminAuth";
@@ -57,9 +61,23 @@ function App() {
           <Route index element={<Navigate to="doctors" replace />} />
           <Route path="doctors" element={<DoctorsManager />} />
           <Route path="gallery" element={<GalleryManager />} />
-          <Route path="leadership" element={<LeadershipManager />} />
+          <Route
+            path="leadership"
+            element={
+              <RequireAdminAuth roles={["admin"]}>
+                <LeadershipManager />
+              </RequireAdminAuth>
+            }
+          />
           <Route path="career" element={<CareerManager />} />
-          <Route path="popup" element={<PopupManager />} />
+          <Route
+            path="popup"
+            element={
+              <RequireAdminAuth roles={["admin"]}>
+                <PopupManager />
+              </RequireAdminAuth>
+            }
+          />
         </Route>
 
         <Route element={<PublicLayout />}>
@@ -80,6 +98,10 @@ function App() {
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/career" element={<Career />} />
           <Route path="/insurance-claim" element={<InsuranceClaim />} />
+          <Route path="/dnb-program" element={<DnbProgram />} />
+          <Route path="/fellowship-programs" element={<FellowshipPrograms />} />
+          <Route path="/bsc-optometry" element={<BScOptometry />} />
+          <Route path="/diploma-ophthalmic-technology" element={<DiplomaOphthalmicTechnology />} />
         </Route>
       </Routes>
     </BrowserRouter>

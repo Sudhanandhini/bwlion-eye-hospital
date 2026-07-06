@@ -9,11 +9,14 @@ export default function SitePopup() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
+    const isPreview = new URLSearchParams(window.location.search).has("preview_popup");
+
     fetch("/api/popup")
       .then((res) => res.json())
       .then((data) => {
-        if (data.enabled && !sessionStorage.getItem(DISMISS_KEY)) {
-          setPopup(data);
+        const active = Array.isArray(data) ? data.find((p) => p.enabled) : null;
+        if (active && (isPreview || !sessionStorage.getItem(DISMISS_KEY))) {
+          setPopup(active);
           setVisible(true);
         }
       })
@@ -35,7 +38,7 @@ export default function SitePopup() {
       onClick={close}
     >
       <div
-        className="bg-white rounded-lg shadow-xl max-w-md w-full overflow-hidden relative"
+        className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -47,7 +50,7 @@ export default function SitePopup() {
         </button>
 
         {popup.image_path && (
-          <img src={popup.image_path} alt="" className="w-full h-auto max-h-72 object-contain bg-gray-50" />
+          <img src={popup.image_path} alt="" className="w-full h-auto max-h-[70vh] object-contain bg-gray-50" />
         )}
 
         <div className="p-6 text-center">

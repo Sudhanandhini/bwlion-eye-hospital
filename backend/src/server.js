@@ -12,6 +12,8 @@ const careerRoutes = require("./routes/career");
 const appointmentsRoutes = require("./routes/appointments");
 const jobApplicationsRoutes = require("./routes/jobApplications");
 const popupRoutes = require("./routes/popup");
+const fellowshipApplicationsRoutes = require("./routes/fellowshipApplications");
+const courseInquiriesRoutes = require("./routes/courseInquiries");
 
 const app = express();
 
@@ -28,6 +30,8 @@ app.use("/api/career", careerRoutes);
 app.use("/api/appointments", appointmentsRoutes);
 app.use("/api/job-applications", jobApplicationsRoutes);
 app.use("/api/popup", popupRoutes);
+app.use("/api/fellowship-applications", fellowshipApplicationsRoutes);
+app.use("/api/course-inquiries", courseInquiriesRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err);

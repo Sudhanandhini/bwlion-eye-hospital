@@ -13,4 +13,14 @@ function requireAuth(req, res, next) {
   }
 }
 
+function requireRole(...allowedRoles) {
+  return (req, res, next) => {
+    if (!req.admin || !allowedRoles.includes(req.admin.role)) {
+      return res.status(403).json({ error: "You do not have permission to do this" });
+    }
+    next();
+  };
+}
+
 module.exports = requireAuth;
+module.exports.requireRole = requireRole;

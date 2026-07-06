@@ -14,7 +14,7 @@ async function request(path, { method = "GET", body, isFormData = false } = {}) 
     body: isFormData ? body : body ? JSON.stringify(body) : undefined,
   });
 
-  if (res.status === 401) {
+  if (res.status === 401 && path !== "/auth/login") {
     clearToken();
     window.location.href = "/admin/login";
     throw new Error("Session expired");
@@ -66,6 +66,10 @@ export const api = {
   reorderCareerJobs: (location, orderedIds) =>
     request("/career/reorder/positions", { method: "PUT", body: { location, orderedIds } }),
 
-  getPopup: () => request("/popup"),
-  updatePopup: (formData) => request("/popup", { method: "PUT", body: formData, isFormData: true }),
+  getPopups: () => request("/popup"),
+  createPopup: (formData) => request("/popup", { method: "POST", body: formData, isFormData: true }),
+  updatePopup: (id, formData) => request(`/popup/${id}`, { method: "PUT", body: formData, isFormData: true }),
+  deletePopup: (id) => request(`/popup/${id}`, { method: "DELETE" }),
+  reorderPopups: (orderedIds) =>
+    request("/popup/reorder/positions", { method: "PUT", body: { orderedIds } }),
 };

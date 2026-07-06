@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { CheckCircle2, ClipboardList, Dna, Stethoscope, Brain, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import PageBanner from "../components/PageBanner";
 import heroImg1 from "../assets/img/ptt_default.jpg";
@@ -12,10 +13,10 @@ const highlights = [
 ];
 
 const courses = [
-  { num: "01", icon: ClipboardList, title: "Diplomate of National Board - DNB", desc: "The DNB program is affiliated with the NBE." },
-  { num: "02", icon: Dna, title: "Fellowship Programs", desc: "The fellowship courses are offered to PG students." },
-  { num: "03", icon: Stethoscope, title: "B. Sc Optometry", desc: "Our administration and support staff have exceptional skills to assist you." },
-  { num: "04", icon: Brain, title: "Diploma in Opthalmic Technology Course", desc: "A diploma in Opthalmic Technology is offered by the Paramedical Board." },
+  { num: "01", icon: ClipboardList, title: "Diplomate of National Board - DNB", desc: "The DNB program is affiliated with the NBE.", path: "/dnb-program" },
+  { num: "02", icon: Dna, title: "Fellowship Programs", desc: "The fellowship courses are offered to PG students.", path: "/fellowship-programs" },
+  { num: "03", icon: Stethoscope, title: "B. Sc Optometry", desc: "Our administration and support staff have exceptional skills to assist you.", path: "/bsc-optometry" },
+  { num: "04", icon: Brain, title: "Diploma in Opthalmic Technology Course", desc: "A diploma in Opthalmic Technology is offered by the Paramedical Board.", path: "/diploma-ophthalmic-technology" },
 ];
 
 export default function Academics() {
@@ -94,9 +95,15 @@ export default function Academics() {
                     <span className="absolute top-5 right-5 text-3xl font-bold text-gray-200">{c.num}</span>
                     <h5 className="mt-4 mb-2">{c.title}</h5>
                     <p className="!text-[14px] text-gray-500 mb-4">{c.desc}</p>
-                    <a href="#" className="text-secondary font-medium inline-flex items-center gap-1 !text-[14px]">
-                      View More <ArrowRight size={14} />
-                    </a>
+                    {c.path ? (
+                      <Link to={c.path} className="text-secondary font-medium inline-flex items-center gap-1 !text-[14px]">
+                        View More <ArrowRight size={14} />
+                      </Link>
+                    ) : (
+                      <a href="#" className="text-secondary font-medium inline-flex items-center gap-1 !text-[14px]">
+                        View More <ArrowRight size={14} />
+                      </a>
+                    )}
                   </div>
                 );
               })}

@@ -1,17 +1,19 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { LogOut } from "lucide-react";
-import { clearToken } from "./auth";
+import { clearToken, isAdmin, getRole } from "./auth";
 
 const navItems = [
-  { to: "/admin/doctors", label: "Doctors" },
-  { to: "/admin/gallery", label: "Gallery" },
-  { to: "/admin/leadership", label: "Leadership" },
-  { to: "/admin/career", label: "Career" },
-  { to: "/admin/popup", label: "Popup" },
+  { to: "/admin/doctors", label: "Doctors", roles: ["admin", "editor"] },
+  { to: "/admin/gallery", label: "Gallery", roles: ["admin", "editor"] },
+  { to: "/admin/leadership", label: "Leadership", roles: ["admin"] },
+  { to: "/admin/career", label: "Career", roles: ["admin", "editor"] },
+  { to: "/admin/popup", label: "Popup", roles: ["admin"] },
 ];
 
 export default function AdminLayout() {
   const navigate = useNavigate();
+  const role = getRole();
+  const visibleItems = navItems.filter((item) => item.roles.includes(role));
 
   const logout = () => {
     clearToken();
@@ -24,9 +26,12 @@ export default function AdminLayout() {
         <div className="p-5 border-b border-white/10">
           <p className="font-bold !text-[18px]">Admin Panel</p>
           <p className="text-gray-300 !text-[13px]">BW Lions Eye Hospital</p>
+          {!isAdmin() && (
+            <p className="text-secondary !text-[12px] mt-1 uppercase tracking-wide">Editor Access</p>
+          )}
         </div>
         <nav className="flex-1 p-3 space-y-1">
-          {navItems.map((item) => (
+          {visibleItems.map((item) => (
             <NavLink
               key={item.to}
               to={item.to}

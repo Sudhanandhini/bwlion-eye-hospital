@@ -79,10 +79,10 @@ const doctors = [
 ];
 
 const courses = [
-  { num: "01", icon: "🏅", title: "Diplomate of National Board DNB", desc: "The DNB program is affiliated with the NBE." },
-  { num: "02", icon: "🧬", title: "Fellowship Programs", desc: "The fellowship courses are offered to PG aspirants." },
-  { num: "03", icon: "🩺", title: "B. Sc Optometry", desc: "B.Sc Degree in Optometry recognized by RGUHS." },
-  { num: "04", icon: "🧠", title: "Diploma in Opthalmic Technology Course", desc: "A diploma in Opthalmic Technology is offered by the Paramedical Board." },
+  { num: "01", icon: "🏅", title: "Diplomate of National Board DNB", desc: "The DNB program is affiliated with the NBE.", link: "/dnb-program" },
+  { num: "02", icon: "🧬", title: "Fellowship Programs", desc: "The fellowship courses are offered to PG aspirants.", link: "/fellowship-programs" },
+  { num: "03", icon: "🩺", title: "B. Sc Optometry", desc: "B.Sc Degree in Optometry recognized by RGUHS.", link: "/bsc-optometry" },
+  { num: "04", icon: "🧠", title: "Diploma in Opthalmic Technology Course", desc: "A diploma in Opthalmic Technology is offered by the Paramedical Board.", link: "/diploma-ophthalmic-technology" },
 ];
 
 const currentOpenings = ["Current Openings in JC Road", "Current Openings in Chintamani"];
@@ -422,9 +422,9 @@ export default function Home() {
                   <span className="absolute top-5 right-5 text-3xl font-bold text-gray-200 text-[60px]">{c.num}</span>
                   <h5 className="mt-4 mb-2 !text-[24px]">{c.title}</h5>
                   <p className="!text-[16px] text-gray-500 mb-4">{c.desc}</p>
-                  <a href="#" className="text-secondary font-medium inline-flex items-center gap-1 !text-[14px]">
+                  <Link to={c.link} className="text-secondary font-medium inline-flex items-center gap-1 !text-[14px]">
                     View More <ArrowRight size={14} />
-                  </a>
+                  </Link>
                 </div>
               ))}
             </div>
