@@ -12,18 +12,17 @@ router.get("/", async (req, res) => {
   res.json(rows);
 });
 
-// Admin: upload one or more images
+// Admin: upload one or more images (newly uploaded images are placed first)
 router.post("/", requireAuth, upload.array("images", 20), async (req, res) => {
   if (!req.files || req.files.length === 0) {
     return res.status(400).json({ error: "At least one image is required" });
   }
-  const [[{ maxOrder }]] = await pool.query(
-    "SELECT COALESCE(MAX(sort_order), -1) AS maxOrder FROM gallery_images"
-  );
+  const n = req.files.length;
+  await pool.query("UPDATE gallery_images SET sort_order = sort_order + ?", [n]);
   const values = req.files.map((file, i) => [
     `/uploads/gallery/${file.filename}`,
     req.body.caption || null,
-    maxOrder + 1 + i,
+    i,
   ]);
   await pool.query(
     "INSERT INTO gallery_images (image_path, caption, sort_order) VALUES ?",

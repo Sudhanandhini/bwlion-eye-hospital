@@ -65,4 +65,7 @@ export const api = {
   deleteCareerJob: (id) => request(`/career/${id}`, { method: "DELETE" }),
   reorderCareerJobs: (location, orderedIds) =>
     request("/career/reorder/positions", { method: "PUT", body: { location, orderedIds } }),
+
+  getPopup: () => request("/popup"),
+  updatePopup: (formData) => request("/popup", { method: "PUT", body: formData, isFormData: true }),
 };

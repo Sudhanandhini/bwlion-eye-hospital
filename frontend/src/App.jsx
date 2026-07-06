@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
+import SitePopup from "./components/SitePopup";
 import Home from "./pages/Home";
 import Contact from "./pages/Contact";
 import VisionMission from "./pages/VisionMission";
@@ -26,6 +27,7 @@ import DoctorsManager from "./admin/DoctorsManager";
 import GalleryManager from "./admin/GalleryManager";
 import LeadershipManager from "./admin/LeadershipManager";
 import CareerManager from "./admin/CareerManager";
+import PopupManager from "./admin/PopupManager";
 
 function PublicLayout() {
   return (
@@ -33,6 +35,7 @@ function PublicLayout() {
       <Header />
       <Outlet />
       <Footer />
+      <SitePopup />
     </div>
   );
 }
@@ -56,6 +59,7 @@ function App() {
           <Route path="gallery" element={<GalleryManager />} />
           <Route path="leadership" element={<LeadershipManager />} />
           <Route path="career" element={<CareerManager />} />
+          <Route path="popup" element={<PopupManager />} />
         </Route>
 
         <Route element={<PublicLayout />}>

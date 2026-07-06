@@ -11,6 +11,7 @@ const trusteesRoutes = require("./routes/trustees");
 const careerRoutes = require("./routes/career");
 const appointmentsRoutes = require("./routes/appointments");
 const jobApplicationsRoutes = require("./routes/jobApplications");
+const popupRoutes = require("./routes/popup");
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use("/api/trustees", trusteesRoutes);
 app.use("/api/career", careerRoutes);
 app.use("/api/appointments", appointmentsRoutes);
 app.use("/api/job-applications", jobApplicationsRoutes);
+app.use("/api/popup", popupRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err);
