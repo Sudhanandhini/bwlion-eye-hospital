@@ -1,5 +1,6 @@
 import { useState } from "react";
 import PageBanner from "../components/PageBanner";
+import { apiUrl } from "../lib/apiBase";
 
 export default function DiplomaOphthalmicTechnology() {
   const [form, setForm] = useState({ name: "", email: "", mobile: "", message: "" });
@@ -13,7 +14,7 @@ export default function DiplomaOphthalmicTechnology() {
     setStatus("sending");
     setError("");
     try {
-      const res = await fetch("/api/course-inquiries", {
+      const res = await fetch(apiUrl("/api/course-inquiries"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...form, course: "Diploma in Opthalmic Technology Course" }),

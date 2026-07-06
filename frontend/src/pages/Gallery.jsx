@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import PageBanner from "../components/PageBanner";
+import { apiUrl, uploadUrl } from "../lib/apiBase";
 
 export default function Gallery() {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeIndex, setActiveIndex] = useState(null);
-  const galleryImages = images.map((img) => img.image_path);
+  const galleryImages = images.map((img) => uploadUrl(img.image_path));
 
   useEffect(() => {
-    fetch("/api/gallery")
+    fetch(apiUrl("/api/gallery"))
       .then((res) => res.json())
       .then(setImages)
       .finally(() => setLoading(false));

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Trash2, Pencil, Plus, ExternalLink } from "lucide-react";
 import { api } from "./api";
 import ReorderButtons, { reorderArray } from "./ReorderButtons";
+import { uploadUrl } from "../lib/apiBase";
 
 function AddPopupForm({ onAdded }) {
   const [form, setForm] = useState({ heading: "", content: "", button_text: "", button_link: "", enabled: false });
@@ -121,7 +122,7 @@ function PopupCard({ popup, onChanged, onUp, onDown, disabledUp, disabledDown })
       <ReorderButtons onUp={onUp} onDown={onDown} disabledUp={disabledUp} disabledDown={disabledDown} />
 
       {popup.image_path && (
-        <img src={popup.image_path} alt="" className="w-24 h-20 rounded-md object-cover flex-shrink-0 bg-gray-100" />
+        <img src={uploadUrl(popup.image_path)} alt="" className="w-24 h-20 rounded-md object-cover flex-shrink-0 bg-gray-100" />
       )}
 
       <div className="flex-1 min-w-0">

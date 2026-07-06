@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ChevronRight, ChevronDown } from "lucide-react";
 import PageBanner from "../components/PageBanner";
 import hospitalImg from "../assets/img/Hospital-1111 (1).jpg";
+import { apiUrl } from "../lib/apiBase";
 
 function JobItem({ title, details, defaultOpen = false }) {
   const [open, setOpen] = useState(defaultOpen);
@@ -30,7 +31,7 @@ export default function Career() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/career")
+    fetch(apiUrl("/api/career"))
       .then((res) => res.json())
       .then(setJobs)
       .finally(() => setLoading(false));
@@ -51,7 +52,7 @@ export default function Career() {
     setApplyStatus("sending");
     setApplyError("");
     try {
-      const res = await fetch("/api/job-applications", {
+      const res = await fetch(apiUrl("/api/job-applications"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(applyForm),

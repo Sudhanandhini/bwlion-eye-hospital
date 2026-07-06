@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { X } from "lucide-react";
+import { apiUrl, uploadUrl } from "../lib/apiBase";
 
 const DISMISS_KEY = "site_popup_dismissed";
 
@@ -11,7 +12,7 @@ export default function SitePopup() {
   useEffect(() => {
     const isPreview = new URLSearchParams(window.location.search).has("preview_popup");
 
-    fetch("/api/popup")
+    fetch(apiUrl("/api/popup"))
       .then((res) => res.json())
       .then((data) => {
         const active = Array.isArray(data) ? data.find((p) => p.enabled) : null;
@@ -50,7 +51,7 @@ export default function SitePopup() {
         </button>
 
         {popup.image_path && (
-          <img src={popup.image_path} alt="" className="w-full h-auto max-h-[70vh] object-contain bg-gray-50" />
+          <img src={uploadUrl(popup.image_path)} alt="" className="w-full h-auto max-h-[70vh] object-contain bg-gray-50" />
         )}
 
         <div className="p-6 text-center">

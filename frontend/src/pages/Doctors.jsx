@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import PageBanner from "../components/PageBanner";
+import { apiUrl, uploadUrl } from "../lib/apiBase";
 
 const GROUP_LABELS = {
   medical_director: "Medical Director",
@@ -11,7 +12,7 @@ function DoctorCard({ name, role, image_path }) {
   return (
     <div className="border border-gray-200 rounded-md overflow-hidden text-left">
       <div className=" overflow-hidden bg-gray-100 h-[300px] flex items-center justify-center">
-        <img src={image_path} alt={name} className="w-full h-full object-cover" />
+        <img src={uploadUrl(image_path)} alt={name} className="w-full h-full object-cover" />
       </div>
       <div className="p-5">
         <h5 className="text-primary mb-1">{name}</h5>
@@ -26,7 +27,7 @@ export default function Doctors() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/doctors")
+    fetch(apiUrl("/api/doctors"))
       .then((res) => res.json())
       .then(setDoctors)
       .finally(() => setLoading(false));

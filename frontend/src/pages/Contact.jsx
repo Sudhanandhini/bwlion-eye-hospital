@@ -4,6 +4,7 @@ import {
   User, ChevronDown, Calendar, Clock,
 } from "lucide-react";
 import PageBanner from "../components/PageBanner";
+import { apiUrl } from "../lib/apiBase";
 
 const locations = [
   {
@@ -73,7 +74,7 @@ export default function Contact() {
     setStatus("sending");
     setError("");
     try {
-      const res = await fetch("/api/appointments", {
+      const res = await fetch(apiUrl("/api/appointments"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

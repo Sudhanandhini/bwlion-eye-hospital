@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { User } from "lucide-react";
 import PageBanner from "../components/PageBanner";
+import { apiUrl, uploadUrl } from "../lib/apiBase";
 
 const GROUP_LABELS = {
   founder: "Founder Trustee",
@@ -14,7 +15,7 @@ function Avatar({ name, role, image_path, size = "md" }) {
     <div className="flex flex-col items-center text-center">
       <div className={`${dims} rounded-md bg-gray-100 overflow-hidden flex items-center justify-center mb-3`}>
         {image_path ? (
-          <img src={image_path} alt={name} className="w-full h-full object-cover" />
+          <img src={uploadUrl(image_path)} alt={name} className="w-full h-full object-cover" />
         ) : (
           <User size={size === "lg" ? 48 : 40} className="text-primary/30" />
         )}
@@ -56,8 +57,8 @@ export default function Leadership() {
 
   useEffect(() => {
     Promise.all([
-      fetch("/api/leadership").then((res) => res.json()),
-      fetch("/api/trustees").then((res) => res.json()),
+      fetch(apiUrl("/api/leadership")).then((res) => res.json()),
+      fetch(apiUrl("/api/trustees")).then((res) => res.json()),
     ])
       .then(([leadershipData, trusteesData]) => {
         setLeaders(leadershipData);

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Trash2, Pencil, Plus } from "lucide-react";
 import { api } from "./api";
 import ReorderButtons, { reorderArray } from "./ReorderButtons";
+import { uploadUrl } from "../lib/apiBase";
 
 const GROUPS = [
   { key: "founder", label: "Founder Trustee" },
@@ -91,7 +92,7 @@ function LeaderCard({ leader, onChanged, onUp, onDown, disabledUp, disabledDown 
   return (
     <div className="bg-white rounded-md border border-gray-200 p-4 flex gap-4">
       <ReorderButtons onUp={onUp} onDown={onDown} disabledUp={disabledUp} disabledDown={disabledDown} />
-      <img src={leader.image_path} alt={leader.name} className="w-20 h-20 rounded-md object-cover flex-shrink-0 bg-gray-100" />
+      <img src={uploadUrl(leader.image_path)} alt={leader.name} className="w-20 h-20 rounded-md object-cover flex-shrink-0 bg-gray-100" />
       <div className="flex-1 min-w-0">
         {editing ? (
           <div className="space-y-2">

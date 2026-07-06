@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import PageBanner from "../components/PageBanner";
+import { apiUrl } from "../lib/apiBase";
 
 const programs = [
   {
@@ -52,7 +53,7 @@ export default function FellowshipPrograms() {
     setStatus("sending");
     setError("");
     try {
-      const res = await fetch("/api/fellowship-applications", {
+      const res = await fetch(apiUrl("/api/fellowship-applications"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

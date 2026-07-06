@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Trash2, Upload } from "lucide-react";
 import { api } from "./api";
 import ReorderButtons, { reorderArray } from "./ReorderButtons";
+import { uploadUrl } from "../lib/apiBase";
 
 export default function GalleryManager() {
   const [images, setImages] = useState([]);
@@ -89,7 +90,7 @@ export default function GalleryManager() {
                 disabledUp={i === 0}
                 disabledDown={i === images.length - 1}
               />
-              <img src={img.image_path} alt="" className="w-full h-28 object-cover rounded-md" />
+              <img src={uploadUrl(img.image_path)} alt="" className="w-full h-28 object-cover rounded-md" />
               <button
                 onClick={() => remove(img.id)}
                 aria-label="Delete image"

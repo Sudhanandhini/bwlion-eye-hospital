@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Trash2, Pencil, Plus } from "lucide-react";
 import { api } from "./api";
 import ReorderButtons, { reorderArray } from "./ReorderButtons";
+import { uploadUrl } from "../lib/apiBase";
 
 const GROUPS = [
   { key: "medical_director", label: "Medical Director" },
@@ -119,7 +120,7 @@ function DoctorCard({ doctor, onChanged, onUp, onDown, disabledUp, disabledDown 
     <div className="bg-white rounded-md border border-gray-200 p-4 flex gap-4">
       <ReorderButtons onUp={onUp} onDown={onDown} disabledUp={disabledUp} disabledDown={disabledDown} />
       <img
-        src={doctor.image_path}
+        src={uploadUrl(doctor.image_path)}
         alt={doctor.name}
         className="w-20 h-20 rounded-md object-cover flex-shrink-0 bg-gray-100"
       />

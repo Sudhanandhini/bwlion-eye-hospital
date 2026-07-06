@@ -13,6 +13,7 @@ import pharmacyImg from "../assets/img/2.png";
 import laboratoryImg from "../assets/img/3.png";
 import lionseyeLogo from "../assets/img/download.png";
 import expertImg from "../assets/img/person.png";
+import { apiUrl, uploadUrl } from "../lib/apiBase";
 import cataractPhoto from "../assets/img/Cataract.jpg";
 import contactLensPhoto from "../assets/img/Contact-Lens-and-Visual-Aids.jpg";
 import corneaPhoto from "../assets/img/Cornea.jpg";
@@ -111,9 +112,9 @@ export default function Home() {
     : [];
 
   useEffect(() => {
-    fetch("/api/gallery")
+    fetch(apiUrl("/api/gallery"))
       .then((res) => res.json())
-      .then((images) => setGalleryThumbs(images.map((img) => img.image_path)));
+      .then((images) => setGalleryThumbs(images.map((img) => uploadUrl(img.image_path))));
   }, []);
 
   useEffect(() => {
@@ -149,7 +150,7 @@ export default function Home() {
     setAppointmentStatus("sending");
     setAppointmentError("");
     try {
-      const res = await fetch("/api/appointments", {
+      const res = await fetch(apiUrl("/api/appointments"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(appointmentForm),

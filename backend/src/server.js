@@ -17,7 +17,12 @@ const courseInquiriesRoutes = require("./routes/courseInquiries");
 
 const app = express();
 
-app.use(cors());
+const allowedOrigins = (process.env.CORS_ORIGIN || "")
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean);
+
+app.use(cors({ origin: allowedOrigins.length ? allowedOrigins : true }));
 app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "..", "uploads")));
 

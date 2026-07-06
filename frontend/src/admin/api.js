@@ -1,4 +1,5 @@
 import { getToken, clearToken } from "./auth";
+import { apiUrl } from "../lib/apiBase";
 
 const BASE = "/api";
 
@@ -8,7 +9,7 @@ async function request(path, { method = "GET", body, isFormData = false } = {}) 
   if (token) headers.Authorization = `Bearer ${token}`;
   if (!isFormData && body) headers["Content-Type"] = "application/json";
 
-  const res = await fetch(`${BASE}${path}`, {
+  const res = await fetch(apiUrl(`${BASE}${path}`), {
     method,
     headers,
     body: isFormData ? body : body ? JSON.stringify(body) : undefined,
